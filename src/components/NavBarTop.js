@@ -10,8 +10,7 @@ import {
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from 'react-router-dom';
 
 class NavBarTop extends React.Component {
@@ -56,4 +55,4 @@ class NavBarTop extends React.Component {
 
 }
 
-export { NavBarTop };
+export { NavBarTop as Navbar };

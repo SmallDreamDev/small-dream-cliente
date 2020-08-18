@@ -1,11 +1,13 @@
 import React from "react";
-import { NavBarTop } from "./components/NavBarTop.js";
+import { Aside } from "./components/AsideBar.js";
+import { Navbar } from "./components/NavbarTop.js";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/navbarStyle.scss';
 
 function App() {
   return (
-    <NavBarTop />
+    <Navbar />
   );
 }
 
