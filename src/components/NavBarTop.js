@@ -2,57 +2,39 @@ import React from "react";
 import {
     Navbar,
     Nav,
-    Form,
-    FormControl,
-    Button,
-    NavDropdown
+    Button
 } from "react-bootstrap";
 import {
     BrowserRouter as Router,
-    Switch,
-    Route
-} from 'react-router-dom';
+} from "react-router-dom";
+import { FiMenu } from "react-icons/fi";
+import { AsideBar } from "./AsideBar";
 
-class NavBarTop extends React.Component {
+class NavbarTop extends React.Component {
 
     render() {
         return (
             <Router>
-                <Navbar expand="fluid" bg="dark" variant="dark">
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-                            <Nav.Link href="#link">Link</Nav.Link>
-                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-                        <Form inline>
-                            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                            <Button variant="outline-success">Search</Button>
-                        </Form>
-                    </Navbar.Collapse>
+                <Navbar sticky="top" expand="fluid" bg="dark" variant="dark">
+                    <Nav.Item>
+                        <Button variant="outline-light">
+                            <FiMenu style={{ fontSize: "25px" }}></FiMenu>
+                            <span style={{ verticalAlign: "middle" }}> Menu</span>
+                        </Button>
+                    </Nav.Item>
                 </Navbar>
-                <div>
-                    <Switch>
-                        <Route path="/about">
-                        </Route>
-                        <Route path="/users">
-                        </Route>
-                        <Route path="/">
-                        </Route>
-                    </Switch>
-                </div>
-            </Router >
+                <nav
+                    style={{
+                        position: "fixed",
+                        width: "20%",
+                        height: "100%",
+                        background: "gray"
+                    }}
+                ></nav>
+            </Router>
         );
     }
 
 }
 
-export { NavBarTop as Navbar };
+export { NavbarTop };

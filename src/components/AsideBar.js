@@ -1,18 +1,11 @@
 import React from "react";
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from 'react-router-dom';
-import {
     ProSidebar,
     Menu,
     MenuItem,
     SubMenu,
     SidebarHeader,
-    SidebarFooter,
-    SidebarContent,
+    SidebarContent
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
@@ -36,7 +29,6 @@ class AsideBar extends React.Component {
             >
                 <SidebarHeader>
                 </SidebarHeader>
-
                 <SidebarContent>
                     <Menu iconShape="circle">
                     </Menu>
