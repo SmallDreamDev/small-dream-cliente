@@ -1,0 +1,9 @@
+#collapsibleSidebar {
+    position: fixed;
+    top: 60px;
+    width: 20%;
+    height: 100%;
+    /* Just as a testing tool to see how the sidebar was sized */
+    /* TODO: Remove this line or substitute the color */
+    background: gray;
+}

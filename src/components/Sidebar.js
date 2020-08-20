@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import "./../styles/sidebar.css";
+
 class Sidebar extends React.Component {
 
     constructor(props) {
@@ -10,16 +12,7 @@ class Sidebar extends React.Component {
 
     render() {
         return (
-            <div
-                id="example-collapse-text"
-                style={{
-                    position: "fixed",
-                    top: "60px",
-                    width: "20%",
-                    height: "100%",
-                    background: "gray"
-                }}
-            >
+            <div id="collapsibleSidebar">
                 <div>Calendar</div>
                 <nav>
                     <ul>
