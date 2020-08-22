@@ -6,4 +6,13 @@
     /* Just as a testing tool to see how the sidebar was sized */
     /* TODO: Remove this line or substitute the color */
     background: gray;
+    left: -20%;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+#collapsibleSidebar.active {
+    left: 0%;
 }

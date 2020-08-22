@@ -6,13 +6,29 @@ import "./../styles/sidebar.css";
 class Sidebar extends React.Component {
 
     constructor(props) {
-        super();
+        super(props);
         this.props = props;
+        this.state = {
+            className: ""
+        };
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        if (this.state.className) {
+            this.setState({
+                className: ""
+            });
+        } else {
+            this.setState({
+                className: "active"
+            });
+        }
     }
 
     render() {
         return (
-            <div id="collapsibleSidebar">
+            <div id="collapsibleSidebar" className={this.state.className}>
                 <div>Calendar</div>
                 <nav>
                     <ul>
@@ -30,6 +46,7 @@ class Sidebar extends React.Component {
             </div>
         );
     };
+
 }
 
 export { Sidebar };
