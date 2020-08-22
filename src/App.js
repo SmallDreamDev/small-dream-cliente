@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { MyNavbar } from "./components/MyNavbar.js";
+import { Sidebar } from "./components/Sidebar";
+import { Body } from "./components/Body";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "bootstrap/dist/css/bootstrap.min.css";
+
+class App extends React.Component {
+
+	constructor() {
+		super();
+		this.sidebar = React.createRef();
+		this.body = React.createRef();
+	}
+
+	render() {
+		return (
+			<Router>
+				<MyNavbar sidebarRef={this.sidebar} bodyRef={this.body} />
+				<Sidebar ref={this.sidebar} />
+				<Body ref={this.body} />
+			</Router>
+		);
+	}
+
 }
 
 export default App;

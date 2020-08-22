@@ -1,0 +1,16 @@
+#collapsibleSidebar {
+    position: fixed;
+    top: 60px;
+    width: 20%;
+    height: 100%;
+    background: gray;
+    left: -20%;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+#collapsibleSidebar.active {
+    left: 0%;
+}
