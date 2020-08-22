@@ -8,7 +8,24 @@ class CalendarWidget extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            onClickDay: this.onChange
+        };
+        this.bodyRef = props.bodyRef;
         this.onChange = this.onChange.bind(this);
+        this.changeOnClick = this.changeOnClick.bind(this);
+    }
+
+    changeOnClick(taskCalendarMounted) {
+        if (taskCalendarMounted) {
+            this.setState({
+                onClickDay: this.onChange
+            });
+        } else {
+            this.setState({
+                onClickDay: () => { }
+            });
+        }
     }
 
     onChange(value, event) {
@@ -18,7 +35,7 @@ class CalendarWidget extends React.Component {
     render() {
         return (
             <Container className="pt-3 pb-1">
-                <Calendar onClickDay={this.onChange} />
+                <Calendar onClickDay={this.state.onClickDay} />
             </Container>
         );
     }

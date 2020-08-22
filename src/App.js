@@ -17,9 +17,17 @@ class App extends React.Component {
 	render() {
 		return (
 			<Router>
-				<MyNavbar sidebarRef={this.sidebar} bodyRef={this.body} />
-				<Sidebar ref={this.sidebar} />
-				<Body ref={this.body} />
+				<MyNavbar
+					sidebarRef={this.sidebar}
+					bodyRef={this.body}
+				/>
+				<Sidebar
+					ref={this.sidebar}
+					bodyRef={this.body}
+				/>
+				<Body
+					ref={this.body}
+				/>
 			</Router>
 		);
 	}
