@@ -1,7 +1,9 @@
 import React from "react";
+import { Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import "./../styles/sidebar.css";
+import { CalendarWidget } from "./CalendarWidget";
 
 class Sidebar extends React.Component {
 
@@ -29,21 +31,16 @@ class Sidebar extends React.Component {
     render() {
         return (
             <div id="collapsibleSidebar" className={this.state.className}>
-                <div>Calendar</div>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/users">Users</Link>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                <CalendarWidget />
+                <Nav className="flex-column">
+                    <Nav.Link>
+                        <Link to="/">Ver calendario</Link>
+                    </Nav.Link>
+                    <Nav.Link>
+                        <Link to="/gestion">Panel de gestión</Link>
+                    </Nav.Link>
+                </Nav>
+            </div >
         );
     }
 
