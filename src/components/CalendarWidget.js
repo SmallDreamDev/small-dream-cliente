@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Calendar from 'react-calendar';
 import { Container } from 'react-bootstrap';
 
-function CalendarWidget() {
-    const [value, onChange] = useState(new Date());
+import 'react-calendar/dist/Calendar.css';
 
-    return (
-        <Container className="pt-3 pb-1">
-            <Calendar
-                onChange={() => { console.log(value); onChange(); }}
-                value={value}
-            />
-        </Container>
-    );
+class CalendarWidget extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.onChange = this.onChange.bind(this);
+    }
+
+    onChange(value, event) {
+        console.log(value);
+    }
+
+    render() {
+        return (
+            <Container className="pt-3 pb-1">
+                <Calendar onClickDay={this.onChange} />
+            </Container>
+        );
+    }
 }
 
 export { CalendarWidget };

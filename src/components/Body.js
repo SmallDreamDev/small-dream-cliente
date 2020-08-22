@@ -3,7 +3,7 @@ import {
     Switch,
     Route
 } from "react-router-dom";
-import { EntityManagementView } from "./../views/EntityManagementView.js";
+// import { EntityManagementView } from "./../views/EntityManagementView.js";
 
 import "./../styles/body.css";
 
@@ -38,11 +38,11 @@ class Body extends React.Component {
             >
                 <Switch>
                     <Route path="/gestion">
-                        <EntityManagementView />
+                        {/* <EntityManagementView /> */}
                     </Route>
-                    {/* <Route path="/">
-                        TODO: Add here main calendar view
-                    </Route> */}
+                    <Route path="/">
+                        {/* TODO: Add here main calendar view */}
+                    </Route>
                 </Switch >
             </div>
         );

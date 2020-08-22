@@ -3,7 +3,8 @@
     top: 60px;
     width: 20%;
     height: 100%;
-    background: gray;
+    background: rgb(233, 231, 231);
+    border-right: 2px solid black;
     left: -20%;
     -webkit-transition: all 500ms ease;
     -moz-transition: all 500ms ease;
@@ -13,4 +14,8 @@
 
 #collapsibleSidebar.active {
     left: 0%;
+}
+
+.sidebarLink {
+    font-size: 20px;
 }

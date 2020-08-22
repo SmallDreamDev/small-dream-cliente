@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
+import { Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import "./../styles/sidebar.css";
@@ -32,14 +32,16 @@ class Sidebar extends React.Component {
         return (
             <div id="collapsibleSidebar" className={this.state.className}>
                 <CalendarWidget />
-                <Nav className="flex-column">
-                    <Nav.Link>
-                        <Link to="/">Ver calendario</Link>
-                    </Nav.Link>
-                    <Nav.Link>
-                        <Link to="/gestion">Panel de gestión</Link>
-                    </Nav.Link>
-                </Nav>
+                <Container>
+                    <Nav className="flex-column">
+                        <Link to="/" className="py-3 my-2 btn btn-secondary">
+                            Ver calendario
+                        </Link>
+                        <Link to="/gestion" className="py-3 my-2 btn btn-secondary">
+                            Panel de gestión
+                        </Link>
+                    </Nav>
+                </Container>
             </div >
         );
     }
