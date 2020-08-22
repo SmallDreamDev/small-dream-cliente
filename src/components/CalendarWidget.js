@@ -11,12 +11,12 @@ class CalendarWidget extends React.Component {
         this.state = {
             onClickDay: this.onChange
         };
-        this.bodyRef = props.bodyRef;
         this.onChange = this.onChange.bind(this);
         this.changeOnClick = this.changeOnClick.bind(this);
     }
 
     changeOnClick(taskCalendarMounted) {
+        console.log(taskCalendarMounted);
         if (taskCalendarMounted) {
             this.setState({
                 onClickDay: this.onChange

@@ -27,6 +27,7 @@ class App extends React.Component {
 				/>
 				<Body
 					ref={this.body}
+					sidebarRef={this.sidebar}
 				/>
 			</Router>
 		);

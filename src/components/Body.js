@@ -4,16 +4,18 @@ import {
     Route
 } from "react-router-dom";
 // import { EntityManagementView } from "./../views/EntityManagementView.js";
+import { CalendarView } from "./../views/CalendarView.js";
 
 import "./../styles/body.css";
 
 class Body extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             className: ""
         };
+        this.sidebarRef = props.sidebarRef;
         this.toggle = this.toggle.bind(this);
     }
 
@@ -41,7 +43,9 @@ class Body extends React.Component {
                         {/* <EntityManagementView /> */}
                     </Route>
                     <Route path="/">
-                        {/* TODO: Add here main calendar view */}
+                        <CalendarView
+                            sidebarRef={this.sidebarRef}
+                        />
                     </Route>
                 </Switch >
             </div>
