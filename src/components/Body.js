@@ -15,7 +15,7 @@ class Body extends React.Component {
         this.state = {
             className: ""
         };
-        this.sidebarRef = props.sidebarRef;
+        this.componentRefs = props.componentRefs;
         this.toggle = this.toggle.bind(this);
     }
 
@@ -35,7 +35,7 @@ class Body extends React.Component {
         return (
             <div
                 id="bodyContainer"
-                ref={this.body}
+                ref={this.componentRefs.body}
                 className={this.state.className}
             >
                 <Switch>
@@ -44,7 +44,8 @@ class Body extends React.Component {
                     </Route>
                     <Route path="/">
                         <CalendarView
-                            sidebarRef={this.sidebarRef}
+                            ref={this.componentRefs.calendarView}
+                            componentRefs={this.componentRefs}
                         />
                     </Route>
                 </Switch >

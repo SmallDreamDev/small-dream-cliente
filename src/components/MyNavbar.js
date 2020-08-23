@@ -12,14 +12,13 @@ class MyNavbar extends React.Component {
 
     constructor(props) {
         super(props);
-        this.sidebarRef = props.sidebarRef;
-        this.bodyRef = props.bodyRef;
+        this.componentRefs = props.componentRefs;
         this.toggleSidebar = this.toggleSidebar.bind(this);
     }
 
     toggleSidebar() {
-        this.sidebarRef.current.toggle();
-        this.bodyRef.current.toggle();
+        this.componentRefs.sidebar.current.toggle();
+        this.componentRefs.body.current.toggle();
     }
 
     render() {

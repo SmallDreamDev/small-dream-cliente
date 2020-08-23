@@ -1,9 +1,9 @@
 import React from "react";
 import { Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { CalendarWidget } from "./CalendarWidget";
 
 import "./../styles/sidebar.css";
-import { CalendarWidget } from "./CalendarWidget";
 
 class Sidebar extends React.Component {
 
@@ -13,12 +13,8 @@ class Sidebar extends React.Component {
         this.state = {
             className: ""
         };
-        this.calendarWidget = React.createRef();
+        this.componentRefs = props.componentRefs;
         this.toggle = this.toggle.bind(this);
-    }
-
-    changeCalendarWidgetOnClick(taskCalendarMounted) {
-        this.calendarWidget.current.changeOnClick(taskCalendarMounted);
     }
 
     toggle() {
@@ -37,7 +33,8 @@ class Sidebar extends React.Component {
         return (
             <div id="collapsibleSidebar" className={this.state.className}>
                 <CalendarWidget
-                    ref={this.calendarWidget}
+                    ref={this.componentRefs.calendarWidget}
+                    componentRefs={this.componentRefs}
                 />
                 <Container>
                     <Nav className="flex-column">
@@ -55,7 +52,7 @@ class Sidebar extends React.Component {
                         </Link>
                     </Nav>
                 </Container>
-            </div >
+            </div>
         );
     }
 

@@ -8,26 +8,31 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
 
-	constructor() {
-		super();
-		this.sidebar = React.createRef();
-		this.body = React.createRef();
+	constructor(props) {
+		super(props);
+		this.componentRefs = {
+			navbar: React.createRef(),
+			sidebar: React.createRef(),
+			body: React.createRef(),
+			calendarWidget: React.createRef(),
+			calendarView: React.createRef()
+		};
 	}
 
 	render() {
 		return (
 			<Router>
 				<MyNavbar
-					sidebarRef={this.sidebar}
-					bodyRef={this.body}
+					ref={this.componentRefs.navbar}
+					componentRefs={this.componentRefs}
 				/>
 				<Sidebar
-					ref={this.sidebar}
-					bodyRef={this.body}
+					ref={this.componentRefs.sidebar}
+					componentRefs={this.componentRefs}
 				/>
 				<Body
-					ref={this.body}
-					sidebarRef={this.sidebar}
+					ref={this.componentRefs.body}
+					componentRefs={this.componentRefs}
 				/>
 			</Router>
 		);
