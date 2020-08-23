@@ -25,7 +25,7 @@ class CalendarView extends React.Component {
     renderActivitiesOnDate(dateObject) {
         // TODO: Ask for activities or w/e we need to display on such date
         // Store them inside the state with setState and let the magic happen
-        this.setState({ dateObject: dateObject });
+        this.setState({ dateObject });
     }
 
     render() {
