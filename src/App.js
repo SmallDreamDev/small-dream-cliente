@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { MyNavbar } from "./components/MyNavbar.js";
 import { Sidebar } from "./components/Sidebar";
 import { Body } from "./components/Body";
+import { LogIn } from "./views/login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -16,11 +17,12 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<Router>
+			/* <Router>
 				<MyNavbar sidebarRef={this.sidebar} bodyRef={this.body} />
 				<Sidebar ref={this.sidebar} />
 				<Body ref={this.body} />
-			</Router>
+			</Router> */
+			<LogIn/>
 		);
 	}
 
