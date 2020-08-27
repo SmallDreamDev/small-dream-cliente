@@ -1,9 +1,10 @@
 import React from "react";
 import { Image, Container, Button, Alert, Form } from "react-bootstrap/";
 import "./../styles/login.css";
-import history from "./../utils/history";
+import { AbstractComponent } from "./../components/AbstractComponent";
+import history from "../utils/history";
 
-class LogIn extends React.Component {
+class LogIn extends AbstractComponent {
 
     constructor() {
         super();
@@ -25,28 +26,17 @@ class LogIn extends React.Component {
     }
 
     logIn(){
-        let url = "http://localhost:8080/usuario/identificarse";
-        let body = {
-            nombre_usuario : document.getElementById("userInput").value,
-            clave : document.getElementById("passwordInput").value
-        }
-        let options = {
-           method : "POST",
-           body : JSON.stringify(body),
-           headers: {
-               "Content-Type" : "application/json"
-           }
-        }
+        let user = document.getElementById("userInput").value;
+        let password = document.getElementById("passwordInput").value;
         let _this = this;
-        fetch(url, options).then(function(res) {
-            if(res.status !== 200){
-                _this.setState({errorMessage : "El usuario o contraseña son incorrectos"});
+        super.getAPIManager().logIn(user, password, function(error){
+            _this.setState({errorMessage : error});
+            if(error){
                 _this.renderError();
             }else{
-                _this.setState({errorMessage : ""});
                 history.push("/");
             }
-        }).catch(error => console.log(error));
+        });
     }
 
     render() {
