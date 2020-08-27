@@ -6,6 +6,7 @@ function handleUnexpectedError(error, callback){
 class APIManager {
     constructor(){
         this.sessionToken = "";
+        this.getToken = this.getToken.bind(this);
     }
 
     getToken(){

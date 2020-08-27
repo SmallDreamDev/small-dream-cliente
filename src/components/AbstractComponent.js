@@ -6,6 +6,7 @@ class AbstractComponent extends React.Component {
     constructor() {
         super();
         this.apiManager = apiManager;
+        this.getAPIManager = this.getAPIManager.bind(this);
     }
 
     getAPIManager(){

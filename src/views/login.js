@@ -14,6 +14,7 @@ class LogIn extends AbstractComponent {
         this.renderError = this.renderError.bind(this);
         this.logIn = this.logIn.bind(this);
     }
+    
 
     renderError(){
         if(this.state.errorMessage){
@@ -29,6 +30,7 @@ class LogIn extends AbstractComponent {
         let user = document.getElementById("userInput").value;
         let password = document.getElementById("passwordInput").value;
         let _this = this;
+        let getToken = super.getAPIManager().getToken;
         super.getAPIManager().logIn(user, password, function(error){
             _this.setState({errorMessage : error});
             if(error){
@@ -36,6 +38,7 @@ class LogIn extends AbstractComponent {
             }else{
                 history.push("/");
             }
+            _this.props.tokenHandler(getToken());
         });
     }
 

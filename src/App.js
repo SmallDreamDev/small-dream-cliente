@@ -5,24 +5,27 @@ import { MyNavbar } from "./components/MyNavbar.js";
 import { Sidebar } from "./components/Sidebar";
 import { Body } from "./components/Body";
 import { LogIn } from "./views/LogIn";
-import { AbstractComponent } from "./components/AbstractComponent";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-class App extends AbstractComponent {
+class App extends React.Component {
 
 	constructor() {
 		super();
 		this.state = {
-			token : super.getAPIManager().getToken()
+			token : ""
 		}
 		this.sidebar = React.createRef();
 		this.body = React.createRef();
+		this.setTokenOnApp = this.setTokenOnApp.bind(this);
+	}
+
+	setTokenOnApp(token){
+		this.setState({ token : token });
 	}
 
 	render() {
 		const { token } = this.state;
-		console.log( token );
 		return (
 			<Container>
 				{ 
@@ -33,7 +36,7 @@ class App extends AbstractComponent {
 						<Body ref={this.body} />
 					</Router>) 
 					: 
-					(<LogIn/>) 
+					(<LogIn tokenHandler={this.setTokenOnApp}/>) 
 				}
 			</Container>
 		);
