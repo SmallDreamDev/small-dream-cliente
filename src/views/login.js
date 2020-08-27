@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, Container, Button, Alert, Form } from "react-bootstrap/";
 import "./../styles/login.css";
+import history from "./../utils/history";
 
 class LogIn extends React.Component {
 
@@ -24,7 +25,28 @@ class LogIn extends React.Component {
     }
 
     logIn(){
-        
+        let url = "http://localhost:8080/usuario/identificarse";
+        let body = {
+            nombre_usuario : document.getElementById("userInput").value,
+            clave : document.getElementById("passwordInput").value
+        }
+        let options = {
+           method : "POST",
+           body : JSON.stringify(body),
+           headers: {
+               "Content-Type" : "application/json"
+           }
+        }
+        let _this = this;
+        fetch(url, options).then(function(res) {
+            if(res.status !== 200){
+                _this.setState({errorMessage : "El usuario o contraseña son incorrectos"});
+                _this.renderError();
+            }else{
+                _this.setState({errorMessage : ""});
+                history.push("/");
+            }
+        }).catch(error => console.log(error));
     }
 
     render() {
@@ -36,11 +58,11 @@ class LogIn extends React.Component {
                 </Container>
                 <Form.Group>
                    <Form.Label>Usuario:</Form.Label>
-                   <Form.Control type="text" className="form-control"></Form.Control>
+                   <Form.Control id="userInput" type="text" className="form-control"></Form.Control>
                 </Form.Group>
                 <Form.Group>
                    <Form.Label>Contraseña:</Form.Label>
-                   <Form.Control type="password" className="form-control"></Form.Control>
+                   <Form.Control id="passwordInput" type="password" className="form-control"></Form.Control>
                 </Form.Group>
                 <Container className="p-0 d-flex justify-content-center">
                     <Button variant="primary" onClick={this.logIn}>Entrar</Button>
