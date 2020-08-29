@@ -21,7 +21,7 @@ class App extends React.Component {
 	}
 
 	setTokenOnApp(token){
-		this.setState({ token : token });
+		this.setState({ token });
 	}
 
 	render() {
