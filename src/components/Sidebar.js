@@ -1,5 +1,7 @@
 import React from "react";
+import { Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { CalendarWidget } from "./CalendarWidget";
 
 import "./../styles/sidebar.css";
 
@@ -11,6 +13,7 @@ class Sidebar extends React.Component {
         this.state = {
             className: ""
         };
+        this.componentRefs = props.componentRefs;
         this.toggle = this.toggle.bind(this);
     }
 
@@ -29,20 +32,26 @@ class Sidebar extends React.Component {
     render() {
         return (
             <div id="collapsibleSidebar" className={this.state.className}>
-                <div>Calendar</div>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/users">Users</Link>
-                        </li>
-                    </ul>
-                </nav>
+                <CalendarWidget
+                    ref={this.componentRefs.calendarWidget}
+                    componentRefs={this.componentRefs}
+                />
+                <Container>
+                    <Nav className="flex-column">
+                        <Link
+                            to="/"
+                            className="py-3 my-2 btn btn-secondary"
+                        >
+                            Ver calendario
+                        </Link>
+                        <Link
+                            to="/gestion"
+                            className="py-3 my-2 btn btn-secondary"
+                        >
+                            Panel de gestión
+                        </Link>
+                    </Nav>
+                </Container>
             </div>
         );
     }

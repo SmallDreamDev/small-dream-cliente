@@ -3,16 +3,19 @@ import {
     Switch,
     Route
 } from "react-router-dom";
+// import { EntityManagementView } from "./../views/EntityManagementView.js";
+import { CalendarView } from "./../views/CalendarView.js";
 
 import "./../styles/body.css";
 
 class Body extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             className: ""
         };
+        this.componentRefs = props.componentRefs;
         this.toggle = this.toggle.bind(this);
     }
 
@@ -32,18 +35,18 @@ class Body extends React.Component {
         return (
             <div
                 id="bodyContainer"
-                ref={this.body}
+                ref={this.componentRefs.body}
                 className={this.state.className}
             >
                 <Switch>
-                    <Route path="/about">
-                        <About />
-                    </Route>
-                    <Route path="/users">
-                        <Users />
+                    <Route path="/gestion">
+                        {/* <EntityManagementView /> */}
                     </Route>
                     <Route path="/">
-                        <Home />
+                        <CalendarView
+                            ref={this.componentRefs.calendarView}
+                            componentRefs={this.componentRefs}
+                        />
                     </Route>
                 </Switch >
             </div>
@@ -51,19 +54,5 @@ class Body extends React.Component {
     }
 
 }
-
-
-function Home() {
-    return <h2>Home</h2>;
-}
-
-function About() {
-    return <h2>About</h2>;
-}
-
-function Users() {
-    return <h2>Users</h2>;
-}
-
 
 export { Body };

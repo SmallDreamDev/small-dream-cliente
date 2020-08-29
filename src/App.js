@@ -10,16 +10,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.Component {
 
-	constructor() {
-		super();
-		this.state = {
+	constructor(props) {
+		super(props);
+    this.state = {
 			token : ""
 		}
-		this.sidebar = React.createRef();
-		this.body = React.createRef();
-		this.setTokenOnApp = this.setTokenOnApp.bind(this);
-	}
-
+		this.componentRefs = {
+			navbar: React.createRef(),
+			sidebar: React.createRef(),
+			body: React.createRef(),
+			calendarWidget: React.createRef(),
+			calendarView: React.createRef()
+		};
+    this.setTokenOnApp = this.setTokenOnApp.bind(this);
+  
+    
 	setTokenOnApp(token){
 		this.setState({ token });
 	}
@@ -31,9 +36,9 @@ class App extends React.Component {
 				{ 
 					token  ? 
 					(<Router>
-						<MyNavbar sidebarRef={this.sidebar} bodyRef={this.body} />
-						<Sidebar ref={this.sidebar} />
-						<Body ref={this.body} />
+						<MyNavbar ref={this.componentRefs.navbar} componentRefs={this.componentRefs}/>
+						<Sidebar ref={this.componentRefs.sidebar} componentRefs={this.componentRefs}/>
+						<Body ref={this.componentRefs.body} componentRefs={this.componentRefs}/>
 					</Router>) 
 					: 
 					(<LogIn tokenHandler={this.setTokenOnApp}/>) 
