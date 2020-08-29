@@ -9,15 +9,15 @@ class LogIn extends AbstractComponent {
     constructor() {
         super();
         this.state = {
-            errorMessage : ""
+            errorMessage: ""
         };
         this.renderError = this.renderError.bind(this);
         this.logIn = this.logIn.bind(this);
     }
-    
 
-    renderError(){
-        if(this.state.errorMessage){
+
+    renderError() {
+        if (this.state.errorMessage) {
             return (
                 <Alert variant="danger">
                     {this.state.errorMessage}
@@ -26,16 +26,16 @@ class LogIn extends AbstractComponent {
         }
     }
 
-    logIn(){
+    logIn() {
         let user = document.getElementById("userInput").value;
         let password = document.getElementById("passwordInput").value;
         let _this = this;
         let getToken = super.getAPIManager().getToken;
-        super.getAPIManager().logIn(user, password, function(error){
-            _this.setState({errorMessage : error});
-            if(error){
+        super.getAPIManager().logIn(user, password, function (error) {
+            _this.setState({ errorMessage: error });
+            if (error) {
                 _this.renderError();
-            }else{
+            } else {
                 history.push("/");
             }
             _this.props.tokenHandler(getToken());
@@ -50,12 +50,12 @@ class LogIn extends AbstractComponent {
                     {this.renderError()}
                 </Container>
                 <Form.Group>
-                   <Form.Label>Usuario:</Form.Label>
-                   <Form.Control id="userInput" type="text" className="form-control"></Form.Control>
+                    <Form.Label>Usuario:</Form.Label>
+                    <Form.Control id="userInput" type="text" className="form-control"></Form.Control>
                 </Form.Group>
                 <Form.Group>
-                   <Form.Label>Contraseña:</Form.Label>
-                   <Form.Control id="passwordInput" type="password" className="form-control"></Form.Control>
+                    <Form.Label>Contraseña:</Form.Label>
+                    <Form.Control id="passwordInput" type="password" className="form-control"></Form.Control>
                 </Form.Group>
                 <Container className="p-0 d-flex justify-content-center">
                     <Button variant="primary" onClick={this.logIn}>Entrar</Button>

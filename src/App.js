@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { MyNavbar } from "./components/MyNavbar.js";
 import { Sidebar } from "./components/Sidebar";
 import { Body } from "./components/Body";
-import { LogIn } from "./views/LogIn";
+import { LogIn } from "./views/Login";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -30,11 +30,10 @@ class App extends React.Component {
 	}
 
 	render() {
-		const token = this.state;
 		return (
 			<Container>
 				{
-					token ?
+					this.state.token ?
 						(<Router>
 							<MyNavbar ref={this.componentRefs.navbar} componentRefs={this.componentRefs} />
 							<Sidebar ref={this.componentRefs.sidebar} componentRefs={this.componentRefs} />
