@@ -12,9 +12,9 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-    this.state = {
-			token : ""
-		}
+		this.state = {
+			token: ""
+		};
 		this.componentRefs = {
 			navbar: React.createRef(),
 			sidebar: React.createRef(),
@@ -22,26 +22,26 @@ class App extends React.Component {
 			calendarWidget: React.createRef(),
 			calendarView: React.createRef()
 		};
-    this.setTokenOnApp = this.setTokenOnApp.bind(this);
-  
-    
-	setTokenOnApp(token){
+		this.setTokenOnApp = this.setTokenOnApp.bind(this);
+	}
+
+	setTokenOnApp(token) {
 		this.setState({ token });
 	}
 
 	render() {
-		const { token } = this.state;
+		const token = this.state;
 		return (
 			<Container>
-				{ 
-					token  ? 
-					(<Router>
-						<MyNavbar ref={this.componentRefs.navbar} componentRefs={this.componentRefs}/>
-						<Sidebar ref={this.componentRefs.sidebar} componentRefs={this.componentRefs}/>
-						<Body ref={this.componentRefs.body} componentRefs={this.componentRefs}/>
-					</Router>) 
-					: 
-					(<LogIn tokenHandler={this.setTokenOnApp}/>) 
+				{
+					token ?
+						(<Router>
+							<MyNavbar ref={this.componentRefs.navbar} componentRefs={this.componentRefs} />
+							<Sidebar ref={this.componentRefs.sidebar} componentRefs={this.componentRefs} />
+							<Body ref={this.componentRefs.body} componentRefs={this.componentRefs} />
+						</Router>)
+						:
+						(<LogIn tokenHandler={this.setTokenOnApp} />)
 				}
 			</Container>
 		);

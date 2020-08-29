@@ -1,6 +1,7 @@
 function handleUnexpectedError(error, callback){
-    console.log(error);
-    callback("Ha ocurrido un error inesperado");
+    if(error){
+        callback("Ha ocurrido un error inesperado");
+    }
 }
 
 class APIManager {
@@ -20,14 +21,14 @@ class APIManager {
         let body = {
             nombre_usuario : user,
             clave : password
-        }
+        };
         let options = {
            method : "POST",
            body : JSON.stringify(body),
            headers: {
                "Content-Type" : "application/json"
            }
-        }
+        };
         let _this = this;
         fetch(url, options).then(function(res) {
             if(res.status !== 200){
@@ -37,7 +38,7 @@ class APIManager {
                     _this.sessionToken = data.token;
                     callback("");
                 }, function(error){
-                    handleUnexpectedError(error, callback)
+                    handleUnexpectedError(error, callback);
                 });
             }
         }).catch(function(error) {
