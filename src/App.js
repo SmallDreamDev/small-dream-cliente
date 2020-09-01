@@ -31,18 +31,18 @@ class App extends React.Component {
 
 	render() {
 		return (
-			//<Container>
-				//{
-					//this.state.token ?
+			<Container>
+				{
+					this.state.token ?
 						(<Router>
 							<MyNavbar ref={this.componentRefs.navbar} componentRefs={this.componentRefs} />
 							<Sidebar ref={this.componentRefs.sidebar} componentRefs={this.componentRefs} />
 							<Body ref={this.componentRefs.body} componentRefs={this.componentRefs} />
 						</Router>)
-						//:
-						//(<LogIn tokenHandler={this.//setTokenOnApp} />)
-				//}
-			//</Container>
+						:
+						(<LogIn tokenHandler={this.setTokenOnApp} />)
+				}
+			</Container>
 		);
 	}
 

@@ -1,20 +1,59 @@
 import React from "react";
 import { Container, Form, Button, InputGroup, FormControl, Table } from "react-bootstrap";
+import { AbstractComponent } from "./../components/AbstractComponent";
+import { getManager, getCollectionName } from "./../utils/entityManager";
 
-class EntityManagementView extends React.Component {
+class EntityManagementView extends AbstractComponent {
 
     constructor(props) {
         super(props);
+        this.state = {
+            currentEntity: "",
+            entityGUIName: "",
+            tableHeaders: [],
+            tableEntries: [],
+        }
+        this.manager = null;
+        this.loadTable = this.loadTable.bind(this);
+        this.buildRow = this.buildRow.bind(this);
+    }
+
+    componentDidMount() {
+        this.loadTable();
+    }
+
+    buildRow(entry) {
+        return this.manager.process(entry);
+    }
+
+    loadTable() {
+        let entityGUIName = document.getElementById("tableSelector")
+            .options[document.getElementById("tableSelector")].value.toLowerCase();
+        let currentEntity = getCollectionName(entityGUIName);
+        this.manager = getManager(currentEntity);
+        let tableHeaders = this.manager.getHeaders();
+
+        let _this = this;
+        super.getAPIManager().getEntityList(currentEntity, function (list) {
+            _this.setState({ currentEntity, entityGUIName, tableHeaders, tableEntries: list });
+        });
+
+
     }
 
     render() {
+        const { entityGUIName, tableHeaders, tableEntries } = this.state;
+        let buildRow = this.buildRow;
+
         return (
-            <Container>
-                <Container className="d-flex align-items-center justify-content-start px-0">
-                    <Container className="px-0 col-4">
-                        <Form className="mx-0  pl-0">
-                            <Form.Label>Selecciona una:</Form.Label>
-                            <Form.Control as="select" multiple>
+            <Container className="p-0">
+                <Container className="p-0">
+                    <Container className="row px-0 mx-0 pt-2">
+                        <Form.Label>Selecciona una:</Form.Label>
+                    </Container>
+                    <Container className="row p-0 m-0">
+                        <Container className="col pl-0">
+                            <Form.Control id="tableSelector" as="select" onChange={this.loadTable}>
                                 <option>Actividades</option>
                                 <option>Categorías</option>
                                 <option>Clientes</option>
@@ -22,51 +61,48 @@ class EntityManagementView extends React.Component {
                                 <option>Monitores</option>
                                 <option>Talleres</option>
                             </Form.Control>
-                        </Form>
+                        </Container>
+                        <Container className="col pr-0">
+                            <InputGroup>
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text>⌕</InputGroup.Text>
+                                </InputGroup.Prepend>
+                                <FormControl id="inlineFormInputGroup" placeholder="Nombre, apellidos..." />
+                            </InputGroup>
+                        </Container>
                     </Container>
-                    <Container className="p-0 col-4">
-                        <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text>⌕</InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <FormControl id="inlineFormInputGroup" placeholder="Nombre, apellidos..." />
-                        </InputGroup>
-                    </Container>
-                    <Container className="d-flex justify-content-end align-self-end px-0 mb-1">
+                    <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
+                        <Button className="ml-1" variant="secondary">Borrar seleccionados</Button>
                         <Button className="mr-1" variant="secondary">Añadir</Button>
-                        <Button variant="secondary">Borrar seleccionados</Button>
                     </Container>
                 </Container>
-                <Table variant="dark" bordered hover responsive/*size="sm"*/>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td colSpan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                    </tbody>
-                </Table>
-            </Container >
+                {
+                    tableEntries.length === 0 ?
+                        (<p>No hay { entityGUIName}</p>)
+                        :
+                        (<><Table variant="dark" bordered hover responsive/*size="sm"*/>
+
+
+                            <thead>
+                                <tr>
+                                    {
+                                        tableHeaders.map(function (h) {
+                                            return <th>{h}</th>;
+                                        })
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    tableEntries.map(function (e) {
+                                        return buildRow(e);
+                                    })
+                                }
+                            </tbody>
+
+                        </Table></>)
+                }
+            </Container>
         );
     }
 

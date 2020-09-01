@@ -7,6 +7,7 @@ function handleUnexpectedError(error, callback){
 class APIManager {
     constructor(){
         this.sessionToken = "";
+        this.baseURL = "http://localhost:8080";
         this.getToken = this.getToken.bind(this);
     }
 
@@ -17,7 +18,7 @@ class APIManager {
     logIn(user, password, callback){
         this.sessionToken = "";
         
-        let url = "http://localhost:8080/usuario/identificarse";
+        let url = this.baseURL + "/usuario/identificarse";
         let body = {
             nombre_usuario : user,
             clave : password
@@ -45,6 +46,26 @@ class APIManager {
             handleUnexpectedError(error, callback);
         });
         
+    }
+
+    getEntityList(collectionName, callback){
+        let url = this.baseURL + "/" + collectionName + "/listar";
+        let options = {
+            method : "GET"
+        };
+        fetch(url, options).then(function(res){
+            if(res.status !== 200){
+                callback([]);
+            }else{
+                res.json().then(function(data) {
+                    callback(data.entityList);
+                }, function(error){
+                    callback([]);
+                });
+            }
+        }).catch(function(error){
+            callback([]);
+        });
     }
 }
 
