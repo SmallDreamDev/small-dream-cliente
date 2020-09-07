@@ -17,7 +17,7 @@ class EntityManagementView extends AbstractComponent {
             allEntries: [],
             deletionErrorMessage: "",
             isModalOpen: false,
-        }
+        };
         this.checkboxes = [];
         this.checkboxesClone = [];
         this.manager = null;
@@ -80,7 +80,7 @@ class EntityManagementView extends AbstractComponent {
         let deleteEntry = super.getAPIManager().deleteEntity;
         let _this = this;
         for (let i = 0; i < this.checkboxesClone.length; i++) {
-            let listElement = this.checkboxes.filter(function (c) { return c.current !== null })[i];
+            let listElement = this.checkboxes.filter(function (c) { return c.current !== null; })[i];
             listElement.current.toggleCheck(this.checkboxesClone[i]);
         }
         this.checkboxes.filter(function (chbx) {
@@ -90,7 +90,7 @@ class EntityManagementView extends AbstractComponent {
             let id = idCell.href.split("id=")[1];
             deleteEntry(id, _this.state.currentEntity, function (isDeleted) {
                 if (isDeleted) {
-                    let tableEntries = _this.state.tableEntries.filter(function (e) { return e._id !== id });
+                    let tableEntries = _this.state.tableEntries.filter(function (e) { return e._id !== id; });
                     _this.setState({ tableEntries, isModalOpen: false });
                 } else {
                     _this.setState({ deletionErrorMessage: "Ha habido un error al borrar la/s fila/s seleccionada/s", isModalOpen: false });
@@ -113,7 +113,7 @@ class EntityManagementView extends AbstractComponent {
     openModal() {
         let selected = this.checkboxes.filter(function (c) { return c.current !== null && c.current.checked(); }).length > 0;
         if (selected) {
-            this.checkboxesClone = this.checkboxes.filter(function (c) { return c.current !== null }).map(function (c) { return c.current.checked() });
+            this.checkboxesClone = this.checkboxes.filter(function (c) { return c.current !== null; }).map(function (c) { return c.current.checked(); });
             this.setState({ isModalOpen: true });
         }
     }

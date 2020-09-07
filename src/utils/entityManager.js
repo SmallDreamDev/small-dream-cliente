@@ -175,4 +175,4 @@ function getManager(collectionName) {
     }
 }
 
-export { getManager, getCollectionName }
+export { getManager, getCollectionName };
