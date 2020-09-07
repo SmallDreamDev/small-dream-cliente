@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Container, Button, Alert, Form } from "react-bootstrap/";
 import "./../styles/login.css";
-import { AbstractComponent } from "./../components/AbstractComponent";
+import { AbstractComponent } from "../components/AbstractComponent";
 import history from "../utils/history";
 
 class LogIn extends AbstractComponent {

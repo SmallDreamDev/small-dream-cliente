@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { MyNavbar } from "./components/MyNavbar.js";
 import { Sidebar } from "./components/Sidebar";
 import { Body } from "./components/Body";
-import { LogIn } from "./views/Login";
+import { LogIn } from "./views/LoginView";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
