@@ -10,17 +10,17 @@ class CustomCheckbox extends React.Component {
         this.ref = React.createRef();
     }
 
-    toggleCheck(value){
+    toggleCheck(value) {
         this.ref.current.checked = value;
     }
 
-    checked(){
+    checked() {
         return this.ref.current.checked;
     }
 
     render() {
         return (
-            <Form.Check key={v4()} ref={this.ref} type="checkbox"/>
+            <Form.Check key={v4()} ref={this.ref} type="checkbox" />
         );
     }
 

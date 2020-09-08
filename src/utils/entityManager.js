@@ -12,14 +12,14 @@ class AbstractManager {
     getHeaders(headerCheckbox, handler) {
         let clone = [...this.headers];
         clone.unshift("#");
-        clone.unshift(<Form.Check key={v4()} ref={headerCheckbox} type="checkbox" onChange={handler}/>);
+        clone.unshift(<Form.Check key={v4()} ref={headerCheckbox} type="checkbox" onChange={handler} />);
         return clone;
     }
 
-    createCheckbox(checkboxes, index){
+    createCheckbox(checkboxes, index) {
         let checkbox = React.createRef();
         checkboxes.push(checkbox);
-        let cb = <CustomCheckbox id={index} ref={checkbox}/>;
+        let cb = <CustomCheckbox id={index} ref={checkbox} />;
         return cb;
     }
 }
