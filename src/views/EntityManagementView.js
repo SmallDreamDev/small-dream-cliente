@@ -85,7 +85,7 @@ class EntityManagementView extends AbstractComponent {
     }
 
     handleAddEntity() {
-        history.push("/crear?collection=" + this.state.currentEntity);
+        history.push("/crearEntidad/" + this.state.currentEntity);
     }
 
     handleDeleteSelected() {
