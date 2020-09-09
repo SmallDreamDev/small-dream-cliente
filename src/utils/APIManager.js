@@ -111,6 +111,30 @@ class APIManager {
             callback(null);
         });
     }
+
+    updateEntityData(id, newEntity, collectionName, callback) {
+        let url = this.baseURL + "/" + collectionName + "/actualizar";
+        let body = {
+            entityId: id,
+            entity: newEntity
+        };
+        let options = {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+        fetch(url, options).then(function (res) {
+            if (res.status !== 200) {
+                callback(false);
+            } else {
+                callback(true);
+            }
+        }).catch(function (error) {
+            callback(false);
+        })
+    }
 }
 
 let apiManager = new APIManager();

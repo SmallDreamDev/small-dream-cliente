@@ -1,7 +1,8 @@
 import React from "react";
-import { Container, Form, ListGroup } from "react-bootstrap";
+import { Container, Form, ListGroup, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CustomCheckbox } from "./../components/CustomCheckbox";
+import { EditButton } from "./../components/EditButton";
 import { v4 } from "uuid";
 
 class AbstractManager {
@@ -21,6 +22,58 @@ class AbstractManager {
         checkboxes.push(checkbox);
         let cb = <CustomCheckbox id={index} ref={checkbox} />;
         return cb;
+    }
+
+    getEntityCardIdComponent(id) {
+        return (
+            <Form.Group>
+                <Form.Label># ID Base de datos:</Form.Label>
+                <Form.Control type="text" value={id} disabled />
+            </Form.Group>
+        );
+    }
+
+    getEntityCardHeadComponent(value) {
+        return (
+            <h2 className="py-4">{value}</h2>
+        );
+    }
+
+    getEntityCardTextComponent(label, fieldName, value, collectionName, entityId) {
+        const inputRef = React.createRef();
+        return (
+            <Container className="px-0">
+                <Form.Label>{label}</Form.Label>
+                <Form.Group as={Row}>
+                    <Col xs="8">
+                        <Form.Control ref={inputRef} type="text" defaultValue={value} disabled />
+                    </Col>
+                    <Col xs="4">
+                        <EditButton fieldName={fieldName} inputRef={inputRef} entityId={entityId} collectionName={collectionName} />
+                    </Col>
+                </Form.Group>
+            </Container>
+        );
+    }
+
+    getEntityCardListComponent(label, collection, noEntriesDisplay, collectionName, elementDisplay) {
+        return (
+            <Form.Group>
+                <Form.Label>{label}</Form.Label>
+                {
+                    !collection ?
+                        <p>{noEntriesDisplay}</p>
+                        :
+                        <ListGroup>
+                            {
+                                collection.map(function (item, index) {
+                                    return getAssociatedEntities(item, collectionName, elementDisplay, index)
+                                })
+                            }
+                        </ListGroup>
+                }
+            </Form.Group>
+        );
     }
 }
 
@@ -48,46 +101,12 @@ class ActivityManager extends AbstractManager {
         const { _id, nombre, zona, categorias, materiales } = data;
         return (
             <Container>
-                <h2>{nombre}</h2>
-                <Form.Group>
-                    <Form.Label># ID Base de datos:</Form.Label>
-                    <Form.Control type="text" value={_id} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Zona:</Form.Label>
-                    <Form.Control type="text" value={zona} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Categorías:</Form.Label>
-                    {
-                        !categorias ?
-                            <p>No existen categorias para esta actividad</p>
-                            :
-                            <ListGroup>
-                                {
-                                    categorias.map(function (c, index) {
-                                        return getAssociatedEntities(c, "categorias", "Categoría", index)
-                                    })
-                                }
-                            </ListGroup>
-                    }
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Materiales usados:</Form.Label>
-                    {
-                        !materiales ?
-                            <p>No hay materiales</p>
-                            :
-                            <ListGroup>
-                                {
-                                    materiales.map(function (m, index) {
-                                        return getAssociatedEntities(m, "materiales", "Material", index);
-                                    })
-                                }
-                            </ListGroup>
-                    }
-
-                </Form.Group>
+                {super.getEntityCardHeadComponent(nombre)}
+                {super.getEntityCardIdComponent(_id)}
+                {super.getEntityCardTextComponent("Nombre:", "nombre", nombre, "actividades", _id)}
+                {super.getEntityCardTextComponent("Zona:", "zona", zona, "actividades", _id)}
+                {super.getEntityCardListComponent("Categorías:", categorias, "No hay ninguna categoría relacionada", "categorias", "Categoría")}
+                {super.getEntityCardListComponent("Materiales:", materiales, "No se usan materiales", "materiales", "Material")}
             </Container>
         );
     }
@@ -115,26 +134,10 @@ class CategoryManager extends AbstractManager {
         const { _id, nombre, actividades } = data;
         return (
             <Container>
-                <h2>{nombre}</h2>
-                <Form.Group>
-                    <Form.Label># ID Base de datos:</Form.Label>
-                    <Form.Control type="text" value={_id} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Actividades en esta categoría:</Form.Label>
-                    {
-                        !actividades ?
-                            <p>No existen actividades en esta categoría</p>
-                            :
-                            <ListGroup>
-                                {
-                                    actividades.map(function (a, index) {
-                                        return getAssociatedEntities(a, "actividades", "Actividad", index)
-                                    })
-                                }
-                            </ListGroup>
-                    }
-                </Form.Group>
+                {super.getEntityCardHeadComponent(nombre)}
+                {super.getEntityCardIdComponent(_id)}
+                {super.getEntityCardTextComponent("Nombre:", "nombre", nombre, "categorias", _id)}
+                {super.getEntityCardListComponent("Actividades en esta categoría:", actividades, "No existen actividades en esta categoría", "actividades", "Actividad")}
             </Container>
         );
     }
@@ -165,38 +168,13 @@ class ClientManager extends AbstractManager {
         const { _id, nombre_completo, dni, contacto, fecha_nacimiento, talleres } = data;
         return (
             <Container>
-                <h2>{nombre_completo}</h2>
-                <Form.Group>
-                    <Form.Label># ID Base de datos:</Form.Label>
-                    <Form.Control type="text" value={_id} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>DNI:</Form.Label>
-                    <Form.Control type="text" value={dni} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Contacto:</Form.Label>
-                    <Form.Control type="text" value={contacto} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Fecha de nacimiento:</Form.Label>
-                    <Form.Control type="text" value={fecha_nacimiento} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Programas en los que está apuntado:</Form.Label>
-                    {
-                        !talleres ?
-                            <p>No está apuntado a nada</p>
-                            :
-                            <ListGroup>
-                                {
-                                    talleres.map(function (t, index) {
-                                        return getAssociatedEntities(t, "talleres", "Programa", index)
-                                    })
-                                }
-                            </ListGroup>
-                    }
-                </Form.Group>
+                {super.getEntityCardHeadComponent(nombre_completo)}
+                {super.getEntityCardIdComponent(_id)}
+                {super.getEntityCardTextComponent("Nombre completo:", "nombre_completo", nombre_completo, "clientes", _id)}
+                {super.getEntityCardTextComponent("DNI:", "dni", dni, "clientes", _id)}
+                {super.getEntityCardTextComponent("Contacto:", "contacto", contacto, "clientes", _id)}
+                {super.getEntityCardTextComponent("Fecha de nacimiento:", "fecha_nacimiento", fecha_nacimiento, "clientes", _id)}
+                {super.getEntityCardListComponent("Programas en los que está apuntado", talleres, "No está apuntado a nada", "talleres", "Programa")}
             </Container>
         );
     }
@@ -225,19 +203,11 @@ class InstructorManager extends AbstractManager {
         const { _id, nombre_completo, dni, contacto } = data;
         return (
             <Container>
-                <h2>{nombre_completo}</h2>
-                <Form.Group>
-                    <Form.Label># ID Base de datos:</Form.Label>
-                    <Form.Control type="text" value={_id} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>DNI:</Form.Label>
-                    <Form.Control type="text" value={dni} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Contacto:</Form.Label>
-                    <Form.Control type="text" value={contacto} disabled />
-                </Form.Group>
+                {super.getEntityCardHeadComponent(nombre_completo)}
+                {super.getEntityCardIdComponent(_id)}
+                {super.getEntityCardTextComponent("Nombre completo:", "nombre_completo", nombre_completo, "monitores", _id)}
+                {super.getEntityCardTextComponent("DNI:", "dni", dni, "monitores", _id)}
+                {super.getEntityCardTextComponent("Contacto:", "contacto", contacto, "monitores", _id)}
             </Container>
         );
     }
@@ -266,34 +236,11 @@ class MaterialManager extends AbstractManager {
         const { _id, descripcion, precio, actividades } = data;
         return (
             <Container>
-                <h2>{descripcion}</h2>
-                <Form.Group>
-                    <Form.Label># ID Base de datos:</Form.Label>
-                    <Form.Control type="text" value={_id} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Descripción:</Form.Label>
-                    <Form.Control type="text" value={descripcion} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Precio:</Form.Label>
-                    <Form.Control type="text" value={precio} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Actividades que lo usan:</Form.Label>
-                    {
-                        !actividades ?
-                            <p>No hay actividades que lo usen</p>
-                            :
-                            <ListGroup>
-                                {
-                                    actividades.map(function (a, index) {
-                                        return getAssociatedEntities(a, "actividades", "Actividad", index)
-                                    })
-                                }
-                            </ListGroup>
-                    }
-                </Form.Group>
+                {super.getEntityCardHeadComponent(descripcion)}
+                {super.getEntityCardIdComponent(_id)}
+                {super.getEntityCardTextComponent("Descripción:", "descripcion", descripcion, "materiales", _id)}
+                {super.getEntityCardTextComponent("Precio:", "precio", precio, "materiales", _id)}
+                {super.getEntityCardListComponent("Actividades que lo usan:", actividades, "No hay actividades que lo usen", "actividades", "Actividad")}
             </Container>
         );
     }
@@ -327,50 +274,21 @@ class WorkshopManager extends AbstractManager {
         const { _id, id_actividad, id_monitor, fecha, hora_inicio, hora_fin, plazas, clientes } = data;
         return (
             <Container>
-                <h2>Programa: Actividad {id_actividad}</h2>
+                {super.getEntityCardHeadComponent(`Programa: Actividad ${id_actividad}`)}
+                {super.getEntityCardIdComponent(_id)}
                 <Form.Group>
-                    <Form.Label># ID Base de datos:</Form.Label>
-                    <Form.Control type="text" value={_id} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>DNI:</Form.Label>
+                    <Form.Label>Actividad impartida:</Form.Label>
                     {getAssociatedEntities(id_actividad, "actividades", "Actividad")}
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>Contacto:</Form.Label>
-                    {getAssociatedEntities(id_monitor, "monitores", "Monitor que la imparte")}
+                    <Form.Label>Monitor que la imparte:</Form.Label>
+                    {getAssociatedEntities(id_monitor, "monitores", "Monitor")}
                 </Form.Group>
-                <Form.Group>
-                    <Form.Label>Fecha:</Form.Label>
-                    <Form.Control type="text" value={fecha} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Hora de inicio:</Form.Label>
-                    <Form.Control type="text" value={hora_inicio} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Hora de fin:</Form.Label>
-                    <Form.Control type="text" value={hora_fin} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Plazas:</Form.Label>
-                    <Form.Control type="text" value={plazas} disabled />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Clientes apuntados:</Form.Label>
-                    {
-                        !clientes ?
-                            <p>No hay ningún cliente apuntado</p>
-                            :
-                            <ListGroup>
-                                {
-                                    clientes.map(function (c, index) {
-                                        return getAssociatedEntities(c, "clientes", "Cliente", index)
-                                    })
-                                }
-                            </ListGroup>
-                    }
-                </Form.Group>
+                {super.getEntityCardTextComponent("Fecha:", "fecha", fecha, "talleres", _id)}
+                {super.getEntityCardTextComponent("Hora de inicio:", "hora_inicio", hora_inicio, "talleres", _id)}
+                {super.getEntityCardTextComponent("Hora de fin:", "hora_fin", hora_fin, "talleres", _id)}
+                {super.getEntityCardTextComponent("Plazas:", "plazas", plazas, "talleres", _id)}
+                {super.getEntityCardListComponent("Clientes apuntados:", clientes, "No hay ningún cliente apuntado", "clientes", "Cliente")}
             </Container>
         );
     }
@@ -400,10 +318,10 @@ function getManager(collectionName) {
     }
 }
 
-function getAssociatedEntities(entityId, collection, displayText, index) {
-    let number = index ? index + 1 : ""
+function getAssociatedEntities(entityId, collection, displayText, index = "") {
+    let number = index.length === 0 ? "" : index + 1;
     return (
-        <ListGroup.Item variant="primary" action href={`/detalles/${collection}/${entityId}`}>
+        <ListGroup.Item key={v4()} variant="primary" action href={`/detalles/${collection}/${entityId}`}>
             {displayText} {number}
         </ListGroup.Item>
     );

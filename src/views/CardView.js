@@ -18,6 +18,7 @@ class CardView extends AbstractComponent {
         this.loadEntityData = this.loadEntityData.bind(this);
         this.renderDataError = this.renderDataError.bind(this);
         this.showEntityCard = this.showEntityCard.bind(this);
+        this.editHandler = this.editHandler.bind(this);
     }
 
     componentDidMount(){
@@ -25,9 +26,13 @@ class CardView extends AbstractComponent {
         this.loadEntityData();
     }
 
+    editHandler(event){
+        console.log(event.target.id);
+    }
+
     showEntityCard(data){
         if(data){
-            return this.manager.processEntityCard(data);
+            return this.manager.processEntityCard(data, this.editHandler);
         }
     }
 
