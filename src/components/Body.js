@@ -5,6 +5,7 @@ import {
 } from "react-router-dom";
 import { EntityManagementView } from "./../views/EntityManagementView.js";
 import { CalendarView } from "./../views/CalendarView.js";
+import { CardView } from "./../views/CardView.js";
 
 import "./../styles/body.css";
 
@@ -41,6 +42,9 @@ class Body extends React.Component {
                 <Switch>
                     <Route path="/gestion">
                         <EntityManagementView />
+                    </Route>
+                    <Route path="/detalles/:colleccion/:id">
+                        <CardView/>
                     </Route>
                     <Route path="/">
                         <CalendarView

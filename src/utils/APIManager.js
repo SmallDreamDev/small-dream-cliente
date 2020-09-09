@@ -91,6 +91,26 @@ class APIManager {
             callback(false);
         });
     }
+
+    getEntityData(id, collectionName, callback) {
+        let url = this.baseURL + "/" + collectionName + "/" + id;
+        let options = {
+            method: "GET"
+        };
+        fetch(url, options).then(function (res) {
+            if (res.status !== 200) {
+                callback(null);
+            } else {
+                res.json().then(function (data) {
+                    callback(data.entityData);
+                }, function (error) {
+                    callback(null);
+                });
+            }
+        }).catch(function (error) {
+            callback(null);
+        });
+    }
 }
 
 let apiManager = new APIManager();

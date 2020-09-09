@@ -39,7 +39,7 @@ class EntityManagementView extends AbstractComponent {
     }
 
     buildRow(entry, i) {
-        return this.manager.process(entry, i, this.checkboxes);
+        return this.manager.processTableEntry(entry, i, this.checkboxes);
     }
 
     toggleCheckboxes() {
