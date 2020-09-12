@@ -9,7 +9,8 @@ class EditButton extends AbstractComponent {
         super(props);
         this.state = {
             editing: false,
-            success: null
+            success: null,
+            displayMessage: ""
         };
         this.inputRef = props.inputRef;
         this.fieldName = props.fieldName;
@@ -23,7 +24,7 @@ class EditButton extends AbstractComponent {
     }
 
     handleEdit() {
-        this.setState({ editing: true });
+        this.setState({ editing: true, success: null, displayMessage: "" });
         this.oldValue = this.inputRef.current.value;
         this.inputRef.current.disabled = false;
     }
@@ -34,10 +35,13 @@ class EditButton extends AbstractComponent {
             [this.fieldName]: newValue
         }
         let _this = this;
-        super.getAPIManager().updateEntityData(this.id, entity, this.collectionName, function (result) {
-            _this.setState({ editing: false, success: result });
+        super.getAPIManager().updateEntityData(this.id, entity, this.collectionName, function (result, displayMessage) {
+            _this.setState({ editing: false, success: result, displayMessage });
             _this.inputRef.current.disabled = true;
             _this.renderResult();
+            if(!result){
+                _this.handleClose();
+            }
         });
     }
 
@@ -49,19 +53,12 @@ class EditButton extends AbstractComponent {
 
     renderResult() {
         if (this.state.success !== null) {
-            if (this.state.success) {
-                return (
-                    <Alert className="mb-0 p-2" variant="success">
-                        Actualizado correctamente
-                    </Alert>
-                );
-            } else {
-                return (
-                    <Alert className="mb-0 p-2" variant="danger">
-                        Error inesperado: no se ha actualizado
-                    </Alert>
-                );
-            }
+            let variant = this.state.success ? "success" : "danger";
+            return (
+                <Alert className="mb-0 p-2" variant={variant}>
+                    {this.state.displayMessage}
+                </Alert>
+            );
         }
     }
 

@@ -127,12 +127,20 @@ class APIManager {
         };
         fetch(url, options).then(function (res) {
             if (res.status !== 200) {
-                callback(false);
+                if(res.status === 422){
+                    res.json().then(function (errorResponse) {
+                        callback(false, errorResponse.validationErrorMessage);
+                    }, function (error) {
+                        callback(false, "Error inesperado: no se ha actualizado");
+                    });
+                }else{
+                    callback(false, "Error inesperado: no se ha actualizado");
+                }
             } else {
-                callback(true);
+                callback(true, "Actualizado correctamente");
             }
         }).catch(function (error) {
-            callback(false);
+            callback(false, "Error inesperado: no se ha actualizado");
         })
     }
 }
