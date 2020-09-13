@@ -92,8 +92,8 @@ class APIManager {
         });
     }
 
-    getEntityData(id, collectionName, callback) {
-        let url = this.baseURL + "/" + collectionName + "/" + id;
+    getEntityDetails(id, collectionName, callback) {
+        let url = this.baseURL + "/" + collectionName + "/detalles/" + id;
         let options = {
             method: "GET"
         };
@@ -102,7 +102,7 @@ class APIManager {
                 callback(null);
             } else {
                 res.json().then(function (data) {
-                    callback(data.entityData);
+                    callback(data.entityDetails);
                 }, function (error) {
                     callback(null);
                 });

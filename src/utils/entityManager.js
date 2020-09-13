@@ -61,13 +61,13 @@ class AbstractManager {
             <Form.Group>
                 <Form.Label>{label}</Form.Label>
                 {
-                    !collection ?
+                    collection.length === 0 ?
                         <p>{noEntriesDisplay}</p>
                         :
                         <ListGroup>
                             {
-                                collection.map(function (item, index) {
-                                    return getAssociatedEntities(item, collectionName, elementDisplay, index)
+                                collection.map(function (item) {
+                                    return getAssociatedEntities(item, collectionName)
                                 })
                             }
                         </ListGroup>
@@ -271,18 +271,18 @@ class WorkshopManager extends AbstractManager {
     }
 
     processEntityCard(data) {
-        const { _id, id_actividad, id_monitor, fecha, hora_inicio, hora_fin, plazas, clientes } = data;
+        const { _id, actividad, monitor, fecha, hora_inicio, hora_fin, plazas, clientes } = data;
         return (
             <Container>
-                {super.getEntityCardHeadComponent(`Programa: Actividad ${id_actividad}`)}
+                {super.getEntityCardHeadComponent(`Programa: ${actividad.nombre} (${fecha} ${hora_inicio} - ${hora_fin})`)}
                 {super.getEntityCardIdComponent(_id)}
                 <Form.Group>
                     <Form.Label>Actividad impartida:</Form.Label>
-                    {getAssociatedEntities(id_actividad, "actividades", "Actividad")}
+                    {getAssociatedEntities(actividad, "actividades")}
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Monitor que la imparte:</Form.Label>
-                    {getAssociatedEntities(id_monitor, "monitores", "Monitor")}
+                    {getAssociatedEntities(monitor, "monitores")}
                 </Form.Group>
                 {super.getEntityCardTextComponent("Fecha:", "fecha", fecha, "talleres", _id)}
                 {super.getEntityCardTextComponent("Hora de inicio:", "hora_inicio", hora_inicio, "talleres", _id)}
@@ -318,11 +318,20 @@ function getManager(collectionName) {
     }
 }
 
-function getAssociatedEntities(entityId, collection, displayText, index = "") {
-    let number = index.length === 0 ? "" : index + 1;
+function getAssociatedEntities(entity, collection) {
+    let displayText = "";
+    switch (collection) {
+        case "actividades": displayText = `${entity.nombre}`; break;
+        case "categorias": displayText = `${entity.nombre}`; break;
+        case "clientes": displayText = `${entity.nombre_completo}`; break;
+        case "materiales": displayText = `${entity.descripcion}`; break;
+        case "monitores": displayText = `${entity.nombre_completo}`; break;
+        case "talleres": displayText = `${entity.actividad.nombre} (${entity.fecha} ${entity.hora_inicio}-${entity.hora_fin})`; break;
+        default: displayText = ""; break;
+    }
     return (
-        <ListGroup.Item key={v4()} variant="primary" action href={`/detalles/${collection}/${entityId}`}>
-            {displayText} {number}
+        <ListGroup.Item key={v4()} variant="primary" action href={`/detalles/${collection}/${entity._id}`}>
+            {displayText}
         </ListGroup.Item>
     );
 }

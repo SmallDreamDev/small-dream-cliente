@@ -38,7 +38,7 @@ class CardView extends AbstractComponent {
 
     loadEntityData() {
         let _this = this;
-        super.getAPIManager().getEntityData(this.state.id, this.state.collection, function (data) {
+        super.getAPIManager().getEntityDetails(this.state.id, this.state.collection, function (data) {
             if (data) {
                 _this.setState({ entityData: data });
             } else {
