@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { EditButton } from "./../components/EditButton";
 import { v4 } from "uuid";
+import "./../styles/card.css";
 
 class AbstractManager {
     constructor() {
@@ -287,8 +288,17 @@ class WorkshopManager extends AbstractManager {
                 {super.getEntityCardTextComponent("Fecha:", "fecha", fecha, "talleres", _id)}
                 {super.getEntityCardTextComponent("Hora de inicio:", "hora_inicio", hora_inicio, "talleres", _id)}
                 {super.getEntityCardTextComponent("Hora de fin:", "hora_fin", hora_fin, "talleres", _id)}
-                {super.getEntityCardTextComponent("Plazas:", "plazas", plazas, "talleres", _id)}
-                {super.getEntityCardListComponent("Clientes apuntados:", clientes, "No hay ningún cliente apuntado", "clientes", "Cliente")}
+                <Form.Label>Plazas:</Form.Label>
+                <Form.Group className="seats-container">
+                    {/* <ListGroup className="align-items-center" horizontal="sm"> */}
+                        {
+                            Array.from(Array(15)).map(function (item, index) {
+                                return getGraphicSeat(plazas, clientes, index)
+                            })
+                        }
+                    {/* </ListGroup> */}
+                </Form.Group>
+                {/* {super.getEntityCardListComponent("Clientes apuntados:", clientes, "No hay ningún cliente apuntado", "clientes", "Cliente")} */}
             </Container>
         );
     }
@@ -334,6 +344,24 @@ function getAssociatedEntities(entity, collection) {
             {displayText}
         </ListGroup.Item>
     );
+}
+
+function getGraphicSeat(numberOfSeats, clients, index) {
+    let result = null;
+    if (clients.length < index + 1) {
+        result = (
+            <ListGroup.Item variant="success">
+                {"<"}Vacío{">"}
+            </ListGroup.Item>
+        );
+    } else {
+        result = (
+            <ListGroup.Item variant="secondary" key={v4()} action href={`/detalles/clientes/${clients[index]._id}`}>
+                {clients[index].nombre_completo}
+            </ListGroup.Item>
+        );
+    }
+    return (<Container className="p-0 seat-item">{result}</Container>);
 }
 
 export { getManager, getCollectionName };
