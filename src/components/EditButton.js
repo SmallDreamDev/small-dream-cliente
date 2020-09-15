@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Button, Alert, Col } from "react-bootstrap"
+import { Container, Button, Alert } from "react-bootstrap"
 import { FaEdit } from "react-icons/fa";
 import { AbstractComponent } from "./AbstractComponent";
 

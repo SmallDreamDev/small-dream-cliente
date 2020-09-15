@@ -275,7 +275,14 @@ class WorkshopManager extends AbstractManager {
         const { _id, actividad, monitor, fecha, hora_inicio, hora_fin, plazas, clientes } = data;
         return (
             <Container>
-                {super.getEntityCardHeadComponent(`Programa: ${actividad.nombre} (${fecha} ${hora_inicio} - ${hora_fin})`)}
+                <Container className="m-0 p-0 row justify-content-between">
+                    <Container className="p-0 mx-0 col-9">
+                        {super.getEntityCardHeadComponent(`Programa: ${actividad.nombre} (${fecha} ${hora_inicio} - ${hora_fin})`)}
+                    </Container>
+                    <Container className="mx-0 p-0 col-2 align-self-center d-flex flex-row-reverse">
+                        <Link className="btn btn-secondary" to={`/detalles/asistencia/${_id}`}>Ver asistencia</Link>
+                    </Container>
+                </Container>
                 {super.getEntityCardIdComponent(_id)}
                 <Form.Group>
                     <Form.Label>Actividad impartida:</Form.Label>
@@ -291,11 +298,11 @@ class WorkshopManager extends AbstractManager {
                 <Form.Label>Plazas:</Form.Label>
                 <Form.Group className="seats-container">
                     {/* <ListGroup className="align-items-center" horizontal="sm"> */}
-                        {
-                            Array.from(Array(15)).map(function (item, index) {
-                                return getGraphicSeat(plazas, clientes, index)
-                            })
-                        }
+                    {
+                        Array.from(Array(plazas)).map(function (item, index) {
+                            return getGraphicSeat(clientes, index)
+                        })
+                    }
                     {/* </ListGroup> */}
                 </Form.Group>
                 {/* {super.getEntityCardListComponent("Clientes apuntados:", clientes, "No hay ningún cliente apuntado", "clientes", "Cliente")} */}
@@ -346,7 +353,7 @@ function getAssociatedEntities(entity, collection) {
     );
 }
 
-function getGraphicSeat(numberOfSeats, clients, index) {
+function getGraphicSeat(clients, index) {
     let result = null;
     if (clients.length < index + 1) {
         result = (
