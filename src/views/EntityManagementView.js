@@ -13,6 +13,7 @@ import { AbstractComponent } from "./../components/AbstractComponent";
 import { getManager, getCollectionName } from "./../utils/entityManager";
 import { v4 } from "uuid";
 import history from "../utils/history";
+import { Link } from "react-router-dom";
 
 class EntityManagementView extends AbstractComponent {
 
@@ -213,12 +214,11 @@ class EntityManagementView extends AbstractComponent {
                             onClick={this.openModal}
                         >Borrar seleccionados
                         </Button>
-                        <Button
-                            className="mr-1"
-                            variant="secondary"
-                            onClick={this.handleAddEntity}
+                        <Link
+                            className="btn btn-secondary"
+                            to={`/crearEntidad/${this.state.currentEntity}`}
                         >Añadir
-                        </Button>
+                        </Link>
                     </Container>
                 </Container>
                 <Container className="p-0">
@@ -262,7 +262,7 @@ class EntityManagementView extends AbstractComponent {
                         <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
                     </Modal.Footer>
                 </Modal>
-            </Container>
+            </Container >
         );
     }
 

@@ -1,8 +1,9 @@
 import React from "react";
-import { Form } from "react-bootstrap";
+import { Form, Container, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { v4 } from "uuid";
+import DatePicker from "react-date-picker";
 
 class AbstractManager {
     constructor() {
@@ -43,6 +44,31 @@ class ActivityManager extends AbstractManager {
             </tr>
         );
     }
+
+    callAPICreateEntity() {
+
+    }
+
+    processCreateEntityForm() {
+        return (
+            <Container>
+                <h1>Crear nueva actividad</h1>
+                <Form>
+                    <Form.Group controlId="activity.form.name">
+                        <Form.Label>Nombre: </Form.Label>
+                        <Form.Control type="text" placeholder="Jumping Clay" />
+                    </Form.Group>
+                    <Form.Group controlId="activity.form.area">
+                        <Form.Label>Zona: </Form.Label>
+                        <Form.Control type="text" placeholder="A" />
+                    </Form.Group>
+                    <Button variant="primary" onClick={this.callAPICreateEntity}>
+                        Crear actividad
+                    </Button>
+                </Form>
+            </Container>
+        );
+    }
 }
 
 class CategoryManager extends AbstractManager {
@@ -60,6 +86,27 @@ class CategoryManager extends AbstractManager {
                 <td>{nombre}</td>
                 <td><Link to={`/detalles?collection=categorias&id=${_id}`}>Ver actividades</Link></td>
             </tr>
+        );
+    }
+
+    callAPICreateEntity() {
+
+    }
+
+    processCreateEntityForm() {
+        return (
+            <Container>
+                <h1>Crear nueva categoría</h1>
+                <Form>
+                    <Form.Group controlId="category.form.name">
+                        <Form.Label>Nombre: </Form.Label>
+                        <Form.Control type="text" placeholder="Steam for kids" />
+                    </Form.Group>
+                    <Button variant="primary" onClick={this.callAPICreateEntity}>
+                        Crear categoría
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 }
@@ -84,6 +131,39 @@ class ClientManager extends AbstractManager {
             </tr>
         );
     }
+
+    callAPICreateEntity() {
+
+    }
+
+    processCreateEntityForm() {
+        return (
+            <Container>
+                <h1>Crear nuevo cliente</h1>
+                <Form>
+                    <Form.Group controlId="client.form.name">
+                        <Form.Label>Nombre completo: </Form.Label>
+                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.dni">
+                        <Form.Label>DNI: </Form.Label>
+                        <Form.Control type="text" placeholder="78945612S" />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.contact">
+                        <Form.Label>Contacto: </Form.Label>
+                        <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.birthDate">
+                        <Form.Label>Fecha de nacimiento: </Form.Label>
+                        <DatePicker />
+                    </Form.Group>
+                    <Button variant="primary" onClick={this.callAPICreateEntity}>
+                        Crear cliente
+                    </Button>
+                </Form>
+            </Container>
+        );
+    }
 }
 
 class InstructorManager extends AbstractManager {
@@ -104,6 +184,35 @@ class InstructorManager extends AbstractManager {
             </tr>
         );
     }
+
+    callAPICreateEntity() {
+
+    }
+
+    processCreateEntityForm() {
+        return (
+            <Container>
+                <h1>Crear nuevo/a monitor/a</h1>
+                <Form>
+                    <Form.Group controlId="instructor.form.name">
+                        <Form.Label>Nombre completo: </Form.Label>
+                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                    </Form.Group>
+                    <Form.Group controlId="instructor.form.dni">
+                        <Form.Label>DNI: </Form.Label>
+                        <Form.Control type="text" placeholder="78945612S" />
+                    </Form.Group>
+                    <Form.Group controlId="instructor.form.contact">
+                        <Form.Label>Contacto: </Form.Label>
+                        <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
+                    </Form.Group>
+                    <Button variant="primary" onClick={this.callAPICreateEntity}>
+                        Crear monitor/a
+                    </Button>
+                </Form>
+            </Container>
+        );
+    }
 }
 
 class MaterialManager extends AbstractManager {
@@ -122,6 +231,27 @@ class MaterialManager extends AbstractManager {
                 <td>{precio}</td>
                 <td><Link to={`/detalles?collection=materiales&id=${_id}`}>Ver actividades</Link></td>
             </tr>
+        );
+    }
+
+    processCreateEntityForm() {
+        return (
+            <Container>
+                <h1>Crear nuevo material</h1>
+                <Form>
+                    <Form.Group controlId="material.form.cost">
+                        <Form.Label>Precio: </Form.Label>
+                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                    </Form.Group>
+                    <Form.Group controlId="material.form.description">
+                        <Form.Label>Description: </Form.Label>
+                        <Form.Control type="text" placeholder="78945612S" />
+                    </Form.Group>
+                    <Button variant="primary" onClick={this.callAPICreateEntity}>
+                        Crear material
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 }
@@ -147,6 +277,39 @@ class WorkshopManager extends AbstractManager {
                 <td><Link to={`/detalles?collection=modosDePago${id_modo_pago}`}>Ver modo de pago</Link></td>
                 <td><Link to={`/detalles?collection=talleres&id=${_id}`}>Ver clientes apuntados</Link></td>
             </tr>
+        );
+    }
+
+    callAPICreateEntity() {
+
+    }
+
+    processCreateEntityForm() {
+        return (
+            <Container>
+                <h1>Crear nuevo taller</h1>
+                <Form>
+                    <Form.Group controlId="client.form.name">
+                        <Form.Label>Nombre completo: </Form.Label>
+                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.dni">
+                        <Form.Label>DNI: </Form.Label>
+                        <Form.Control type="text" placeholder="78945612S" />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.contact">
+                        <Form.Label>Contacto: </Form.Label>
+                        <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.birthDate">
+                        <Form.Label>Fecha de nacimiento: </Form.Label>
+                        <DatePicker />
+                    </Form.Group>
+                    <Button variant="primary" onClick={this.callAPICreateEntity}>
+                        Crear taller
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 }

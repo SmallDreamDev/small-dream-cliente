@@ -1,37 +1,39 @@
 import React from "react";
-import { Container, Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
-function CreateEntityView() {
-    let { coleccion } = useParams();
+import { AbstractComponent } from "./../components/AbstractComponent.js";
+import { getManager } from "./../utils/entityManager.js";
+import { getParams } from "./../utils/urlParser.js";
 
-    return (
-        <Container>
-            <h1>Crear nueva entidad</h1>
-            <Container>
-                <Form>
-                    <Form.Group controlId="exampleForm.ControlInput1">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="name@example.com" />
-                    </Form.Group>
-                    <Form.Group controlId="exampleForm.ControlSelect1">
-                        <Form.Label>Example select</Form.Label>
-                        <Form.Control as="select">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Example textarea</Form.Label>
-                        <Form.Control as="textarea" rows="3" />
-                    </Form.Group>
-                </Form>
+import "./../styles/createEntityView.css";
+
+class CreateEntityView extends AbstractComponent {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            manager: null
+        };
+    }
+
+    componentDidMount() {
+        // ["crearEntidad", "actividades" (collection)]
+        let params = getParams(window.location.href);
+        this.setState({ manager: getManager(params[1]) });
+    }
+
+    render() {
+        return (
+            <Container className="p-0">
+                {
+                    this.state.manager ?
+                        (this.state.manager.processCreateEntityForm())
+                        :
+                        (<h1>Cargando formulario...</h1>)
+                }
             </Container>
-        </Container>
-    );
+        );
+    }
 }
 
 export { CreateEntityView };

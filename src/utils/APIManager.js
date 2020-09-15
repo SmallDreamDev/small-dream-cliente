@@ -91,6 +91,7 @@ class APIManager {
             callback(false);
         });
     }
+
 }
 
 let apiManager = new APIManager();
