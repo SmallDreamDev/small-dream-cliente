@@ -91,6 +91,58 @@ class APIManager {
             callback(false);
         });
     }
+
+    getEntityDetails(id, collectionName, callback) {
+        let url = this.baseURL + "/" + collectionName + "/detalles/" + id;
+        let options = {
+            method: "GET"
+        };
+        fetch(url, options).then(function (res) {
+            if (res.status !== 200) {
+                callback(null);
+            } else {
+                res.json().then(function (data) {
+                    callback(data.entityDetails);
+                }, function (error) {
+                    callback(null);
+                });
+            }
+        }).catch(function (error) {
+            callback(null);
+        });
+    }
+
+    updateEntityData(id, newEntity, collectionName, callback) {
+        let url = this.baseURL + "/" + collectionName + "/actualizar";
+        let body = {
+            entityId: id,
+            entity: newEntity
+        };
+        let options = {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+        fetch(url, options).then(function (res) {
+            if (res.status !== 200) {
+                if(res.status === 422){
+                    res.json().then(function (errorResponse) {
+                        callback(false, errorResponse.validationErrorMessage);
+                    }, function (error) {
+                        callback(false, "Error inesperado: no se ha actualizado");
+                    });
+                }else{
+                    callback(false, "Error inesperado: no se ha actualizado");
+                }
+            } else {
+                callback(true, "Actualizado correctamente");
+            }
+        }).catch(function (error) {
+            callback(false, "Error inesperado: no se ha actualizado");
+        });
+    }
 }
 
 let apiManager = new APIManager();
