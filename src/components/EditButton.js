@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Button, Alert } from "react-bootstrap"
+import { Container, Button, Alert } from "react-bootstrap";
 import { FaEdit } from "react-icons/fa";
 import { AbstractComponent } from "./AbstractComponent";
 
@@ -33,7 +33,7 @@ class EditButton extends AbstractComponent {
         let newValue = this.inputRef.current.value;
         let entity = {
             [this.fieldName]: newValue
-        }
+        };
         let _this = this;
         super.getAPIManager().updateEntityData(this.id, entity, this.collectionName, function (result, displayMessage) {
             _this.setState({ editing: false, success: result, displayMessage });

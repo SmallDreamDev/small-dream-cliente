@@ -10,15 +10,14 @@ class CardView extends AbstractComponent {
         const collection = getParams(window.location.href)[1];
         const id = getParams(window.location.href)[2];
         this.state = {
-            collection: collection,
-            id: id,
+            collection,
+            id,
             entityData: null,
             dataErrorMessage: ""
         };
         this.loadEntityData = this.loadEntityData.bind(this);
         this.renderDataError = this.renderDataError.bind(this);
         this.showEntityCard = this.showEntityCard.bind(this);
-        this.editHandler = this.editHandler.bind(this);
     }
 
     componentDidMount(){
@@ -26,13 +25,9 @@ class CardView extends AbstractComponent {
         this.loadEntityData();
     }
 
-    editHandler(event){
-        console.log(event.target.id);
-    }
-
     showEntityCard(data){
         if(data){
-            return this.manager.processEntityCard(data, this.editHandler);
+            return this.manager.processEntityCard(data);
         }
     }
 

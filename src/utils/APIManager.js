@@ -141,7 +141,7 @@ class APIManager {
             }
         }).catch(function (error) {
             callback(false, "Error inesperado: no se ha actualizado");
-        })
+        });
     }
 }
 

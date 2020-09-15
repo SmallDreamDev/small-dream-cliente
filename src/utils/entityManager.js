@@ -6,6 +6,42 @@ import { EditButton } from "./../components/EditButton";
 import { v4 } from "uuid";
 import "./../styles/card.css";
 
+function getAssociatedEntities(entity, collection) {
+    let displayText = "";
+    switch (collection) {
+        case "actividades": displayText = `${entity.nombre}`; break;
+        case "categorias": displayText = `${entity.nombre}`; break;
+        case "clientes": displayText = `${entity.nombre_completo}`; break;
+        case "materiales": displayText = `${entity.descripcion}`; break;
+        case "monitores": displayText = `${entity.nombre_completo}`; break;
+        case "talleres": displayText = `${entity.actividad.nombre} (${entity.fecha} ${entity.hora_inicio}-${entity.hora_fin})`; break;
+        default: displayText = ""; break;
+    }
+    return (
+        <ListGroup.Item key={v4()} variant="primary" action href={`/detalles/${collection}/${entity._id}`}>
+            {displayText}
+        </ListGroup.Item>
+    );
+}
+
+function getGraphicSeat(clients, index) {
+    let result = null;
+    if (clients.length < index + 1) {
+        result = (
+            <ListGroup.Item variant="success">
+                {"<"}Vacío{">"}
+            </ListGroup.Item>
+        );
+    } else {
+        result = (
+            <ListGroup.Item variant="secondary" key={v4()} action href={`/detalles/clientes/${clients[index]._id}`}>
+                {clients[index].nombre_completo}
+            </ListGroup.Item>
+        );
+    }
+    return (<Container className="p-0 seat-item">{result}</Container>);
+}
+
 class AbstractManager {
     constructor() {
         this.headers = [];
@@ -68,7 +104,7 @@ class AbstractManager {
                         <ListGroup>
                             {
                                 collection.map(function (item) {
-                                    return getAssociatedEntities(item, collectionName)
+                                    return getAssociatedEntities(item, collectionName);
                                 })
                             }
                         </ListGroup>
@@ -300,7 +336,7 @@ class WorkshopManager extends AbstractManager {
                     {/* <ListGroup className="align-items-center" horizontal="sm"> */}
                     {
                         Array.from(Array(plazas)).map(function (item, index) {
-                            return getGraphicSeat(clientes, index)
+                            return getGraphicSeat(clientes, index);
                         })
                     }
                     {/* </ListGroup> */}
@@ -333,42 +369,6 @@ function getManager(collectionName) {
         case "talleres": return new WorkshopManager();
         default: return null;
     }
-}
-
-function getAssociatedEntities(entity, collection) {
-    let displayText = "";
-    switch (collection) {
-        case "actividades": displayText = `${entity.nombre}`; break;
-        case "categorias": displayText = `${entity.nombre}`; break;
-        case "clientes": displayText = `${entity.nombre_completo}`; break;
-        case "materiales": displayText = `${entity.descripcion}`; break;
-        case "monitores": displayText = `${entity.nombre_completo}`; break;
-        case "talleres": displayText = `${entity.actividad.nombre} (${entity.fecha} ${entity.hora_inicio}-${entity.hora_fin})`; break;
-        default: displayText = ""; break;
-    }
-    return (
-        <ListGroup.Item key={v4()} variant="primary" action href={`/detalles/${collection}/${entity._id}`}>
-            {displayText}
-        </ListGroup.Item>
-    );
-}
-
-function getGraphicSeat(clients, index) {
-    let result = null;
-    if (clients.length < index + 1) {
-        result = (
-            <ListGroup.Item variant="success">
-                {"<"}Vacío{">"}
-            </ListGroup.Item>
-        );
-    } else {
-        result = (
-            <ListGroup.Item variant="secondary" key={v4()} action href={`/detalles/clientes/${clients[index]._id}`}>
-                {clients[index].nombre_completo}
-            </ListGroup.Item>
-        );
-    }
-    return (<Container className="p-0 seat-item">{result}</Container>);
 }
 
 export { getManager, getCollectionName };
