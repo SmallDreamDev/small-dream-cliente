@@ -136,6 +136,7 @@ class EntityManagementView extends AbstractComponent {
 
         let _this = this;
         super.getAPIManager().getEntityList(currentEntity, function (list) {
+            _this.manager.sortEntries(list);
             _this.setState({ currentEntity, entityGUIName: entityGUIName.toLowerCase(), tableHeaders, tableEntries: list, allEntries: list, deletionErrorMessage: "" });
         });
     }
