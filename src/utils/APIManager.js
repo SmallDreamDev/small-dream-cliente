@@ -92,6 +92,30 @@ class APIManager {
         });
     }
 
+    createEntity(entityData, collectionName, callbackError, callbackSuccess) {
+        let url = `${this.baseURL}/${collectionName}/crear`;
+        let options = {
+            method: "POST",
+            body: JSON.stringify(entityData),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        fetch(url, options).then(
+            function (response) {
+                return response.json();
+            }
+        ).then(
+            function (result) {
+                callbackSuccess(result);
+            },
+            function (error) {
+                callbackError(error);
+            }
+        ).catch(function (error) {
+            callbackError(error);
+        });
+    }
 }
 
 let apiManager = new APIManager();

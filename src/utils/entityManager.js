@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Container, Button } from "react-bootstrap";
+import { Form, Container, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { v4 } from "uuid";
@@ -29,6 +29,10 @@ class ActivityManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre", "Zona", "Categorías asociadas", "Materiales usados"];
+        this.formRefs = {
+            nombre: React.createRef(),
+            zona: React.createRef()
+        };
     }
 
     process(entry, index, checkboxes) {
@@ -45,25 +49,49 @@ class ActivityManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity() {
-
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
+            nombre: this.formRefs.nombre.current.value,
+            zona: this.formRefs.zona.current.value
+        };
+        if (!entityData.nombre | !entityData.zona) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, errorAlert);
+        } else {
+            callbackFunction(entityData, null);
+        }
     }
 
-    processCreateEntityForm() {
+    processCreateEntityForm(callbackFunction, errorAlert) {
         return (
             <Container>
                 <h1>Crear nueva actividad</h1>
+                {errorAlert ? errorAlert : null}
                 <Form>
                     <Form.Group controlId="activity.form.name">
                         <Form.Label>Nombre: </Form.Label>
-                        <Form.Control type="text" placeholder="Jumping Clay" />
+                        <Form.Control
+                            ref={this.formRefs.nombre}
+                            type="text"
+                            placeholder="Jumping Clay"
+                        />
                     </Form.Group>
                     <Form.Group controlId="activity.form.area">
                         <Form.Label>Zona: </Form.Label>
-                        <Form.Control type="text" placeholder="A" />
+                        <Form.Control
+                            ref={this.formRefs.zona}
+                            type="text"
+                            placeholder="A"
+                        />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.callAPICreateEntity}>
-                        Crear actividad
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear actividad
                     </Button>
                 </Form>
             </Container>
@@ -89,11 +117,14 @@ class CategoryManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity() {
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
 
+        };
+        callbackFunction(entityData);
     }
 
-    processCreateEntityForm() {
+    processCreateEntityForm(callbackFunction) {
         return (
             <Container>
                 <h1>Crear nueva categoría</h1>
@@ -102,8 +133,10 @@ class CategoryManager extends AbstractManager {
                         <Form.Label>Nombre: </Form.Label>
                         <Form.Control type="text" placeholder="Steam for kids" />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.callAPICreateEntity}>
-                        Crear categoría
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear categoría
                     </Button>
                 </Form>
             </Container>
@@ -132,11 +165,14 @@ class ClientManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity() {
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
 
+        };
+        callbackFunction(entityData);
     }
 
-    processCreateEntityForm() {
+    processCreateEntityForm(callbackFunction) {
         return (
             <Container>
                 <h1>Crear nuevo cliente</h1>
@@ -157,8 +193,10 @@ class ClientManager extends AbstractManager {
                         <Form.Label>Fecha de nacimiento: </Form.Label>
                         <DatePicker />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.callAPICreateEntity}>
-                        Crear cliente
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear cliente
                     </Button>
                 </Form>
             </Container>
@@ -185,11 +223,14 @@ class InstructorManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity() {
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
 
+        };
+        callbackFunction(entityData);
     }
 
-    processCreateEntityForm() {
+    processCreateEntityForm(callbackFunction) {
         return (
             <Container>
                 <h1>Crear nuevo/a monitor/a</h1>
@@ -206,8 +247,10 @@ class InstructorManager extends AbstractManager {
                         <Form.Label>Contacto: </Form.Label>
                         <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.callAPICreateEntity}>
-                        Crear monitor/a
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear monitor/a
                     </Button>
                 </Form>
             </Container>
@@ -234,7 +277,7 @@ class MaterialManager extends AbstractManager {
         );
     }
 
-    processCreateEntityForm() {
+    processCreateEntityForm(callbackFunction) {
         return (
             <Container>
                 <h1>Crear nuevo material</h1>
@@ -247,8 +290,10 @@ class MaterialManager extends AbstractManager {
                         <Form.Label>Description: </Form.Label>
                         <Form.Control type="text" placeholder="78945612S" />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.callAPICreateEntity}>
-                        Crear material
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear material
                     </Button>
                 </Form>
             </Container>
@@ -280,11 +325,14 @@ class WorkshopManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity() {
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
 
+        };
+        callbackFunction(entityData);
     }
 
-    processCreateEntityForm() {
+    processCreateEntityForm(callbackFunction) {
         return (
             <Container>
                 <h1>Crear nuevo taller</h1>
@@ -305,8 +353,10 @@ class WorkshopManager extends AbstractManager {
                         <Form.Label>Fecha de nacimiento: </Form.Label>
                         <DatePicker />
                     </Form.Group>
-                    <Button variant="primary" onClick={this.callAPICreateEntity}>
-                        Crear taller
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear taller
                     </Button>
                 </Form>
             </Container>
