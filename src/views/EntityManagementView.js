@@ -4,6 +4,7 @@ import { AbstractComponent } from "./../components/AbstractComponent";
 import { getManager, getCollectionName } from "./../utils/entityManager";
 import { v4 } from "uuid";
 import history from "../utils/history";
+import { FiRefreshCcw } from "react-icons/fi";
 
 class EntityManagementView extends AbstractComponent {
 
@@ -23,7 +24,7 @@ class EntityManagementView extends AbstractComponent {
         this.manager = null;
         this.headerCheckbox = React.createRef();
         this.loadTable = this.loadTable.bind(this);
-        this.changeTable = this.changeTable.bind(this);
+        this.refresh = this.refresh.bind(this);
         this.buildRow = this.buildRow.bind(this);
         this.toggleCheckboxes = this.toggleCheckboxes.bind(this);
         this.filterBySearchBar = this.filterBySearchBar.bind(this);
@@ -87,7 +88,7 @@ class EntityManagementView extends AbstractComponent {
             return chbx.current !== null && chbx.current.checked();
         }).forEach(function (chbx) {
             let idCell = document.getElementById(chbx.current.id);
-            let id = idCell.href.split("id=")[1];
+            let id = idCell.href.split(_this.state.currentEntity + "/")[1];
             deleteEntry(id, _this.state.currentEntity, function (isDeleted) {
                 if (isDeleted) {
                     let tableEntries = _this.state.tableEntries.filter(function (e) { return e._id !== id; });
@@ -122,8 +123,8 @@ class EntityManagementView extends AbstractComponent {
         this.setState({ isModalOpen: false });
     }
 
-    changeTable() {
-
+    refresh() {
+        this.loadTable();
     }
 
     loadTable() {
@@ -175,7 +176,10 @@ class EntityManagementView extends AbstractComponent {
                                 </Container>
                                 <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
                                     <Button className="ml-1" variant="secondary" onClick={this.openModal}>Borrar seleccionados</Button>
-                                    <Button className="mr-1" variant="secondary" onClick={this.handleAddEntity}>Añadir</Button>
+                                    <Button className="mx-1" variant="secondary" onClick={this.handleAddEntity}>Añadir</Button>
+                                    <Button className="mr-1" variant="secondary" onClick={this.refresh}>
+                                        <FiRefreshCcw />
+                                    </Button>
                                 </Container>
                             </Container>
                             <Container className="p-0">
