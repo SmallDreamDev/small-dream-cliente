@@ -40,7 +40,7 @@ class CreateEntityView extends AbstractComponent {
                 function (error) {
                     let errorAlert = (
                         <Alert variant="danger">
-                            Vaya! Ha ocurrido algún error en el proceso
+                            {error.validationErrorMessage}
                         </Alert>
                     );
                     this.setState({

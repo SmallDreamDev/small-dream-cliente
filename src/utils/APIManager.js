@@ -101,18 +101,17 @@ class APIManager {
                 "Content-Type": "application/json"
             }
         };
-        fetch(url, options).then(
-            function (response) {
-                return response.json();
-            }
-        ).then(
-            function (result) {
-                callbackSuccess(result);
-            },
-            function (error) {
-                callbackError(error);
-            }
-        ).catch(function (error) {
+        fetch(url, options).then(function (response) {
+            return [response.status, response.json()];
+        }).then(function (result) {
+            result[1].then(function (jsonBody) {
+                if (result[0] !== 201) {
+                    callbackError(jsonBody);
+                } else {
+                    callbackSuccess(jsonBody);
+                }
+            });
+        }).catch(function (error) {
             callbackError(error);
         });
     }

@@ -1,9 +1,11 @@
 import React from "react";
-import { Form, Container, Button, Alert } from "react-bootstrap";
+import { Form, Container, Button, Alert, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { v4 } from "uuid";
 import DatePicker from "react-date-picker";
+import { MyDatePicker } from "../components/MyDatePicker";
+import { apiManager } from "./APIManager";
 
 class AbstractManager {
     constructor() {
@@ -103,6 +105,9 @@ class CategoryManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre", "Actividades en esta categoría"];
+        this.formRefs = {
+            nombre: React.createRef()
+        };
     }
 
     process(entry, index, checkboxes) {
@@ -118,20 +123,35 @@ class CategoryManager extends AbstractManager {
     }
 
     callAPICreateEntity(callbackFunction) {
+        console.log("Ejecutando esto");
         let entityData = {
-
+            nombre: this.formRefs.nombre.current.value
         };
-        callbackFunction(entityData);
+        if (!entityData.nombre) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, errorAlert);
+        } else {
+            callbackFunction(entityData, null);
+        }
     }
 
-    processCreateEntityForm(callbackFunction) {
+    processCreateEntityForm(callbackFunction, errorAlert) {
         return (
             <Container>
                 <h1>Crear nueva categoría</h1>
+                {errorAlert ? errorAlert : null}
                 <Form>
                     <Form.Group controlId="category.form.name">
                         <Form.Label>Nombre: </Form.Label>
-                        <Form.Control type="text" placeholder="Steam for kids" />
+                        <Form.Control
+                            ref={this.formRefs.nombre}
+                            type="text"
+                            placeholder="Steam for kids"
+                        />
                     </Form.Group>
                     <Button
                         variant="primary"
@@ -148,6 +168,12 @@ class ClientManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre y apellidos", "DNI", "Contacto", "Fecha de nacimiento", "Actividades en las que está apuntado"];
+        this.formRefs = {
+            nombreCompleto: React.createRef(),
+            dni: React.createRef(),
+            contacto: React.createRef(),
+            fechaNacimiento: React.createRef()
+        };
     }
 
     process(entry, index, checkboxes) {
@@ -166,32 +192,55 @@ class ClientManager extends AbstractManager {
     }
 
     callAPICreateEntity(callbackFunction) {
+        let bDate = this.formRefs.fechaNacimiento.current.getCurrentDate();
+        let year = bDate.getFullYear();
+        let month = String(bDate.getMonth() + 1).padStart(2, '0');
+        let day = String(bDate.getDate()).padStart(2, '0');
         let entityData = {
-
+            nombre_completo: this.formRefs.nombreCompleto.current.value,
+            dni: this.formRefs.dni.current.value,
+            contacto: this.formRefs.contacto.current.value,
+            fecha_nacimiento: `${year}/${month}/${day}`
         };
         callbackFunction(entityData);
     }
 
-    processCreateEntityForm(callbackFunction) {
+    processCreateEntityForm(callbackFunction, errorAlert) {
         return (
             <Container>
                 <h1>Crear nuevo cliente</h1>
+                {errorAlert ? errorAlert : null}
                 <Form>
                     <Form.Group controlId="client.form.name">
                         <Form.Label>Nombre completo: </Form.Label>
-                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                        <Form.Control
+                            ref={this.formRefs.nombreCompleto}
+                            type="text"
+                            placeholder="Javier Sánchez Sáenz"
+                        />
                     </Form.Group>
                     <Form.Group controlId="client.form.dni">
                         <Form.Label>DNI: </Form.Label>
-                        <Form.Control type="text" placeholder="78945612S" />
+                        <Form.Control
+                            ref={this.formRefs.dni}
+                            type="text"
+                            placeholder="78945612S"
+                        />
                     </Form.Group>
                     <Form.Group controlId="client.form.contact">
                         <Form.Label>Contacto: </Form.Label>
-                        <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
+                        <Form.Control
+                            ref={this.formRefs.contacto}
+                            type="text"
+                            placeholder="Tfno. Móvil, fijo, email, ..."
+                        />
                     </Form.Group>
                     <Form.Group controlId="client.form.birthDate">
                         <Form.Label>Fecha de nacimiento: </Form.Label>
-                        <DatePicker />
+                        <br />
+                        <MyDatePicker
+                            ref={this.formRefs.fechaNacimiento}
+                        />
                     </Form.Group>
                     <Button
                         variant="primary"
@@ -208,6 +257,11 @@ class InstructorManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre y apellidos", "DNI", "Contacto"];
+        this.formRefs = {
+            nombreCompleto: React.createRef(),
+            dni: React.createRef(),
+            contacto: React.createRef()
+        };
     }
 
     process(entry, index, checkboxes) {
@@ -225,27 +279,42 @@ class InstructorManager extends AbstractManager {
 
     callAPICreateEntity(callbackFunction) {
         let entityData = {
-
+            nombre_completo: this.formRefs.nombreCompleto.current.value,
+            dni: this.formRefs.dni.current.value,
+            contacto: this.formRefs.contacto.current.value
         };
         callbackFunction(entityData);
     }
 
-    processCreateEntityForm(callbackFunction) {
+    processCreateEntityForm(callbackFunction, errorAlert) {
         return (
             <Container>
                 <h1>Crear nuevo/a monitor/a</h1>
+                {errorAlert ? errorAlert : null}
                 <Form>
                     <Form.Group controlId="instructor.form.name">
                         <Form.Label>Nombre completo: </Form.Label>
-                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                        <Form.Control
+                            ref={this.formRefs.nombreCompleto}
+                            type="text"
+                            placeholder="Javier Sánchez Sáenz"
+                        />
                     </Form.Group>
                     <Form.Group controlId="instructor.form.dni">
                         <Form.Label>DNI: </Form.Label>
-                        <Form.Control type="text" placeholder="78945612S" />
+                        <Form.Control
+                            ref={this.formRefs.dni}
+                            type="text"
+                            placeholder="78945612S"
+                        />
                     </Form.Group>
                     <Form.Group controlId="instructor.form.contact">
                         <Form.Label>Contacto: </Form.Label>
-                        <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
+                        <Form.Control
+                            ref={this.formRefs.contacto}
+                            type="text"
+                            placeholder="Tfno. Móvil, fijo, email, ..."
+                        />
                     </Form.Group>
                     <Button
                         variant="primary"
@@ -262,6 +331,10 @@ class MaterialManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Descripción", "Precio", "Actividades que usan este material"];
+        this.formRefs = {
+            descripcion: React.createRef(),
+            precio: React.createRef()
+        };
     }
 
     process(entry, index, checkboxes) {
@@ -277,18 +350,36 @@ class MaterialManager extends AbstractManager {
         );
     }
 
-    processCreateEntityForm(callbackFunction) {
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
+            descripcion: this.formRefs.descripcion.current.value,
+            precio: parseFloat(this.formRefs.precio.current.value)
+        };
+        console.log(entityData);
+        callbackFunction(entityData);
+    }
+
+    processCreateEntityForm(callbackFunction, errorAlert) {
         return (
             <Container>
                 <h1>Crear nuevo material</h1>
+                {errorAlert ? errorAlert : null}
                 <Form>
                     <Form.Group controlId="material.form.cost">
                         <Form.Label>Precio: </Form.Label>
-                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                        <Form.Control
+                            ref={this.formRefs.precio}
+                            type="text"
+                            placeholder="Precio genérico"
+                        />
                     </Form.Group>
                     <Form.Group controlId="material.form.description">
                         <Form.Label>Description: </Form.Label>
-                        <Form.Control type="text" placeholder="78945612S" />
+                        <Form.Control
+                            ref={this.formRefs.descripcion}
+                            type="text"
+                            placeholder="Arcilla blanca para modelar"
+                        />
                     </Form.Group>
                     <Button
                         variant="primary"
@@ -304,7 +395,24 @@ class MaterialManager extends AbstractManager {
 class WorkshopManager extends AbstractManager {
     constructor() {
         super();
-        this.headers = ["# Actividad", "# Monitor", "Fecha", "Hora inicio", "Hora fin", "Plazas totales", "# Modo de pago", "Clientes apuntados"];
+        this.headers = ["# Actividad", "# Monitor", "Fecha", "Hora inicio", "Hora fin", "Plazas totales", "Pago", "Clientes apuntados"];
+        this.formRefs = {
+            actividad: React.createRef(),
+            monitor: React.createRef(),
+            fecha: React.createRef(),
+            horaInicio: React.createRef(),
+            horaFin: React.createRef(),
+            plazasTotales: React.createRef(),
+            modoDepago: React.createRef(),
+            importe: React.createRef()
+        };
+        // combobox activ.
+        // combo monit. 
+        // input fecha,
+        // hora 
+        // plazas totales,
+        // cbbox modosDePago 
+        // importe
     }
 
     process(entry, index, checkboxes) {
@@ -327,39 +435,138 @@ class WorkshopManager extends AbstractManager {
 
     callAPICreateEntity(callbackFunction) {
         let entityData = {
-
+            id_monitor: "",
+            id_actividad: "",
+            fecha: "",
+            hora_inicio: "",
+            hora_fin: "",
+            plazas: "",
+            modo_pago: "",
+            importe: ""
         };
         callbackFunction(entityData);
     }
 
-    processCreateEntityForm(callbackFunction) {
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        let monitores, actividades = [];
+        // Get monitores
+        apiManager.getEntityList("monitores", function (entityList) {
+            entityList.forEach(element => {
+                monitores.push(element);
+            });
+        });
+        // Get actividades
+        apiManager.getEntityList("actividades", function (entityList) {
+            entityList.forEach(element => {
+                actividades.push(element);
+            });
+        });
         return (
             <Container>
                 <h1>Crear nuevo taller</h1>
+                {errorAlert ? errorAlert : null}
                 <Form>
-                    <Form.Group controlId="client.form.name">
-                        <Form.Label>Nombre completo: </Form.Label>
-                        <Form.Control type="text" placeholder="Javier Sánchez Sáenz" />
+                    <Form.Group controlId="workshop.form.instructor">
+                        <Form.Label>Seleccionar monitor: </Form.Label>
+                        <Form.Control as="select">
+                            {
+                                monitores.map((monitor) => {
+                                    return (<option>{monitor}</option>);
+                                })
+                            }
+                        </Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="client.form.dni">
-                        <Form.Label>DNI: </Form.Label>
-                        <Form.Control type="text" placeholder="78945612S" />
+                    <Form.Group controlId="workshop.form.activity">
+                        <Form.Label>Seleccionar Actividad: </Form.Label>
+                        <Form.Control as="select">
+                            {
+                                actividades.map((monitor) => {
+                                    return (<option>{monitor}</option>);
+                                })
+                            }
+                        </Form.Control>
                     </Form.Group>
-                    <Form.Group controlId="client.form.contact">
-                        <Form.Label>Contacto: </Form.Label>
-                        <Form.Control type="text" placeholder="Tfno. Móvil, fijo, email, ..." />
+                    <Form.Group controlId="workshop.form.date">
+                        <Form.Label>Fecha: </Form.Label>
+                        <br />
+                        <MyDatePicker ref={this.formRefs.fecha} />
                     </Form.Group>
-                    <Form.Group controlId="client.form.birthDate">
-                        <Form.Label>Fecha de nacimiento: </Form.Label>
-                        <DatePicker />
+                    <Form.Group controlId="workshop.form.startTime">
+                        <Form.Label>Hora inicio: </Form.Label>
+                        <Row>
+                            <Col className="col-2">
+                                <Form.Control as="select">
+                                    {
+                                        Array.from(Array(24).keys()).map((number) => {
+                                            return (<option>{number}</option>);
+                                        })
+                                    }
+                                </Form.Control>
+                            </Col>
+                                :
+                            <Col className="col-2">
+                                <Form.Control as="select">
+                                    {
+                                        Array.from(Array(60).keys()).map((number) => {
+                                            return (<option>{number}</option>);
+                                        })
+                                    }
+                                </Form.Control>
+                            </Col>
+                        </Row>
+                    </Form.Group>
+                    <Form.Group controlId="workshop.form.endTime">
+                        <Form.Label>Hora fin: </Form.Label>
+                        <Row>
+                            <Col className="col-2">
+                                <Form.Control as="select">
+                                    {
+                                        Array.from(Array(24).keys()).map((number) => {
+                                            return (<option>{number}</option>);
+                                        })
+                                    }
+                                </Form.Control>
+                            </Col>
+                                :
+                            <Col className="col-2">
+                                <Form.Control as="select">
+                                    {
+                                        Array.from(Array(60).keys()).map((number) => {
+                                            return (<option>{number}</option>);
+                                        })
+                                    }
+                                </Form.Control>
+                            </Col>
+                        </Row>
+                    </Form.Group>
+                    <Form.Group controlId="workshop.form.maxPeople">
+                        <Form.Label>Plazas totales: </Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Número de plazas"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="workshop.form.paymentType">
+                        <Form.Label>Modo de pago: </Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Por hora"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="workshop.form.amount">
+                        <Form.Label>Importe: </Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Cantidad"
+                        />
                     </Form.Group>
                     <Button
                         variant="primary"
                         onClick={() => { this.callAPICreateEntity(callbackFunction) }}
                     >Crear taller
                     </Button>
-                </Form>
-            </Container>
+                </Form >
+            </Container >
         );
     }
 }
