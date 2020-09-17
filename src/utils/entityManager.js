@@ -22,7 +22,7 @@ function getAssociatedWorkshops(entity, collection) {
                 <Form.Check name={`attendanceRadioGroup${entity._id}`} inline label="No asistido" type="radio" defaultChecked={!hasAttended} disabled />
             </Container>
         </Container>
-    )
+    );
 }
 
 function getAssociatedEntities(entity, collection) {

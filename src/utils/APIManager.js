@@ -160,7 +160,7 @@ class APIManager {
                 callback([], "Ha habido un error al conseguir esta información de la base de datos");
             } else {
                 res.json().then(function (data) {
-                    let attendances = data.entityList.filter(function (att) { return att.id_taller === workshopId });
+                    let attendances = data.entityList.filter(function (att) { return att.id_taller === workshopId; });
                     callback(attendances);
                 }, function (error) {
                     callback([], "Ha habido un error al conseguir esta información de la base de datos");
@@ -168,7 +168,7 @@ class APIManager {
             }
         }).catch(function (error) {
             callback([], "Ha habido un error al conseguir esta información de la base de datos");
-        })
+        });
     }
 
     createEntity(body, collectionName, callback) {

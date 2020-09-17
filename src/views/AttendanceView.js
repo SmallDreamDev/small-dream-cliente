@@ -47,11 +47,11 @@ class AttendanceView extends AbstractComponent {
 
     handleNotAttendedSelected(event) {
         let clientId = event.target.name.split("attendanceRadioGroup")[1];
-        let attendance = this.state.attendanceList.filter(function (att) { return att.id_cliente === clientId })[0];
+        let attendance = this.state.attendanceList.filter(function (att) { return att.id_cliente === clientId; })[0];
         let _this = this;
         super.getAPIManager().deleteEntity(attendance._id, "asistencia", function (isDeleted) {
             if (isDeleted) {
-                let attendanceList = _this.state.attendanceList.filter(function (att) { return att.id_cliente !== clientId })
+                let attendanceList = _this.state.attendanceList.filter(function (att) { return att.id_cliente !== clientId; });
                 _this.setState({ attendanceList, successUpdateMessage: "Actualizado correctamente - Cambiado a No asistido"});
                 _this.renderSuccessAttendanceUpdate();
             } else {
@@ -61,7 +61,7 @@ class AttendanceView extends AbstractComponent {
     }
 
     buildClientListItem(client) {
-        let hasAttended = this.state.attendanceList.filter(function (att) { return att.id_cliente === client._id }).length > 0;
+        let hasAttended = this.state.attendanceList.filter(function (att) { return att.id_cliente === client._id; }).length > 0;
         return (
             <Container key={v4()} className="d-flex align-items-center p-0">
                 <Container className="p-0 col-7">
@@ -117,7 +117,7 @@ class AttendanceView extends AbstractComponent {
                         {this.state.successUpdateMessage}
                     </Alert>
                 </Container>
-            )
+            );
         }
     }
 
