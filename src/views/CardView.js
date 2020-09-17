@@ -35,6 +35,7 @@ class CardView extends AbstractComponent {
         let _this = this;
         super.getAPIManager().getEntityDetails(this.state.id, this.state.collection, function (data) {
             if (data) {
+                _this.manager.sortListItems(data);
                 _this.setState({ entityData: data });
             } else {
                 _this.setState({ dataErrorMessage: "Ha habido un error al cargar la ficha" });

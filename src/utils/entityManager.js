@@ -5,6 +5,25 @@ import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { EditButton } from "./../components/EditButton";
 import { v4 } from "uuid";
 import "./../styles/card.css";
+import { sortWorkshopsByDate } from "./../utils/sortingFunctions";
+
+function getAssociatedWorkshops(entity, collection) {
+    let displayText = `${entity.actividad.nombre} (${entity.fecha} ${entity.hora_inicio}-${entity.hora_fin})`;
+    let hasAttended = entity.asistido;
+    return (
+        <Container key={v4()} className="d-flex align-items-center p-0">
+            <Container className="p-0 col-8">
+                <ListGroup.Item variant="primary" action href={`/detalles/${collection}/${entity._id}`}>
+                    {displayText}
+                </ListGroup.Item>
+            </Container>
+            <Container>
+                <Form.Check name={`attendanceRadioGroup${entity._id}`} inline label="Asistido" type="radio" defaultChecked={hasAttended} disabled />
+                <Form.Check name={`attendanceRadioGroup${entity._id}`} inline label="No asistido" type="radio" defaultChecked={!hasAttended} disabled />
+            </Container>
+        </Container>
+    );
+}
 
 function getAssociatedEntities(entity, collection) {
     let displayText = "";
@@ -14,7 +33,7 @@ function getAssociatedEntities(entity, collection) {
         case "clientes": displayText = `${entity.nombre_completo}`; break;
         case "materiales": displayText = `${entity.descripcion}`; break;
         case "monitores": displayText = `${entity.nombre_completo}`; break;
-        case "talleres": displayText = `${entity.actividad.nombre} (${entity.fecha} ${entity.hora_inicio}-${entity.hora_fin})`; break;
+        case "talleres": return getAssociatedWorkshops(entity, collection);
         default: displayText = ""; break;
     }
     return (
@@ -111,6 +130,14 @@ class AbstractManager {
                 }
             </Form.Group>
         );
+    }
+
+    sortEntries(entries) {
+        return entries;
+    }
+
+    sortListItems(data) {
+        return data;
     }
 }
 
@@ -215,6 +242,10 @@ class ClientManager extends AbstractManager {
             </Container>
         );
     }
+
+    sortListItems(data) {
+        return sortWorkshopsByDate(data.talleres);
+    }
 }
 
 class InstructorManager extends AbstractManager {
@@ -316,7 +347,7 @@ class WorkshopManager extends AbstractManager {
                         {super.getEntityCardHeadComponent(`Programa: ${actividad.nombre} (${fecha} ${hora_inicio} - ${hora_fin})`)}
                     </Container>
                     <Container className="mx-0 p-0 col-2 align-self-center d-flex flex-row-reverse">
-                        <Link className="btn btn-secondary" to={`/detalles/asistencia/${_id}`}>Ver asistencia</Link>
+                        <Link className="btn btn-secondary" to={`/detalles/talleres/asistencia/${_id}`}>Ver asistencia</Link>
                     </Container>
                 </Container>
                 {super.getEntityCardIdComponent(_id)}
@@ -333,17 +364,18 @@ class WorkshopManager extends AbstractManager {
                 {super.getEntityCardTextComponent("Hora de fin:", "hora_fin", hora_fin, "talleres", _id)}
                 <Form.Label>Plazas:</Form.Label>
                 <Form.Group className="seats-container">
-                    {/* <ListGroup className="align-items-center" horizontal="sm"> */}
                     {
                         Array.from(Array(plazas)).map(function (item, index) {
                             return getGraphicSeat(clientes, index);
                         })
                     }
-                    {/* </ListGroup> */}
                 </Form.Group>
-                {/* {super.getEntityCardListComponent("Clientes apuntados:", clientes, "No hay ningún cliente apuntado", "clientes", "Cliente")} */}
             </Container>
         );
+    }
+
+    sortEntries(entries) {
+        return sortWorkshopsByDate(entries);
     }
 }
 
