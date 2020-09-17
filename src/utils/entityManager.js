@@ -317,29 +317,29 @@ class MaterialManager extends AbstractManager {
 class WorkshopManager extends AbstractManager {
     constructor() {
         super();
-        this.headers = ["# Actividad", "# Monitor", "Fecha", "Hora inicio", "Hora fin", "Plazas totales", "# Modo de pago", "Clientes apuntados"];
+        this.headers = ["# Actividad", "# Monitor", "Fecha", "Hora inicio", "Hora fin", "Plazas totales", "Pago", "Clientes apuntados"];
     }
 
     processTableEntry(entry, index, checkboxes) {
-        const { _id, id_actividad, id_monitor, fecha, hora_inicio, hora_fin, plazas, id_modo_pago } = entry;
+        const { _id, id_actividad, id_monitor, fecha, hora_inicio, hora_fin, plazas, modo_pago, importe, nombre_actividad, nombre_monitor } = entry;
         return (
             <tr key={v4()}>
                 <td>{super.createCheckbox(checkboxes, index)}</td>
                 <td><Link id={index} key={v4()} to={`/detalles/talleres/${_id}`}>{index + 1}</Link></td>
-                <td><Link to={`/detalles/actividades/${id_actividad}`}>Ver actividad</Link></td>
-                <td><Link to={`/detalles/monitores/${id_monitor}`}>Ver monitor</Link></td>
+                <td><Link to={`/detalles/actividades/${id_actividad}`}>{nombre_actividad}</Link></td>
+                <td><Link to={`/detalles/monitores/${id_monitor}`}>{nombre_monitor}</Link></td>
                 <td>{fecha}</td>
                 <td>{hora_inicio}</td>
                 <td>{hora_fin}</td>
                 <td>{plazas}</td>
-                <td><Link to={`/detalles/modosDePago/${id_modo_pago}`}>Ver modo de pago</Link></td>
+                <td>{importe} {modo_pago}</td>
                 <td><Link to={`/detalles/talleres/${_id}`}>Ver clientes apuntados</Link></td>
             </tr>
         );
     }
 
     processEntityCard(data) {
-        const { _id, actividad, monitor, fecha, hora_inicio, hora_fin, plazas, clientes } = data;
+        const { _id, actividad, monitor, fecha, hora_inicio, hora_fin, plazas, modo_pago, importe, clientes } = data;
         return (
             <Container>
                 <Container className="m-0 p-0 row justify-content-between">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Form, Button, InputGroup, FormControl, Table, Alert, Modal } from "react-bootstrap";
+import { Container, Form, Button, InputGroup, FormControl, Table, Alert, Modal, Spinner } from "react-bootstrap";
 import { AbstractComponent } from "./../components/AbstractComponent";
 import { getManager, getCollectionName } from "./../utils/entityManager";
 import { v4 } from "uuid";
@@ -146,76 +146,85 @@ class EntityManagementView extends AbstractComponent {
         let buildRow = this.buildRow;
         return (
             <Container className="p-0">
-                <Container className="p-0">
-                    <Container className="row px-0 mx-0 pt-2">
-                        <Form.Label>Selecciona una:</Form.Label>
-                    </Container>
-                    <Container className="row p-0 m-0">
-                        <Container className="col pl-0">
-                            <Form.Control id="tableSelector" as="select" onChange={this.loadTable}>
-                                <option>Actividades</option>
-                                <option>Categorías</option>
-                                <option>Clientes</option>
-                                <option>Materiales</option>
-                                <option>Monitores</option>
-                                <option>Programaciones</option>
-                            </Form.Control>
-                        </Container>
-                        <Container className="col pr-0">
-                            <InputGroup>
-                                <InputGroup.Prepend>
-                                    <InputGroup.Text>⌕</InputGroup.Text>
-                                </InputGroup.Prepend>
-                                <FormControl id="inlineFormInputGroup" placeholder="Nombre, apellidos..." onChange={this.filterBySearchBar} />
-                            </InputGroup>
-                        </Container>
-                    </Container>
-                    <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
-                        <Button className="ml-1" variant="secondary" onClick={this.openModal}>Borrar seleccionados</Button>
-                        <Button className="mr-1" variant="secondary" onClick={this.handleAddEntity}>Añadir</Button>
-                    </Container>
-                </Container>
-                <Container className="p-0">
-                    {this.renderEntityDeletionError()}
-                </Container>
                 {
-                    tableEntries.length === 0 && entityGUIName ?
-                        (<p>No hay { entityGUIName}</p>)
+                    tableEntries !== null ?
+                        (<Container className="p-0">
+                            <Container className="p-0">
+                                <Container className="row px-0 mx-0 pt-2">
+                                    <Form.Label>Selecciona una:</Form.Label>
+                                </Container>
+                                <Container className="row p-0 m-0">
+                                    <Container className="col pl-0">
+                                        <Form.Control id="tableSelector" as="select" onChange={this.loadTable}>
+                                            <option>Actividades</option>
+                                            <option>Categorías</option>
+                                            <option>Clientes</option>
+                                            <option>Materiales</option>
+                                            <option>Monitores</option>
+                                            <option>Programaciones</option>
+                                        </Form.Control>
+                                    </Container>
+                                    <Container className="col pr-0">
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>⌕</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <FormControl id="inlineFormInputGroup" placeholder="Nombre, apellidos..." onChange={this.filterBySearchBar} />
+                                        </InputGroup>
+                                    </Container>
+                                </Container>
+                                <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
+                                    <Button className="ml-1" variant="secondary" onClick={this.openModal}>Borrar seleccionados</Button>
+                                    <Button className="mr-1" variant="secondary" onClick={this.handleAddEntity}>Añadir</Button>
+                                </Container>
+                            </Container>
+                            <Container className="p-0">
+                                {this.renderEntityDeletionError()}
+                            </Container>
+                            {
+                                tableEntries.length === 0 && entityGUIName ?
+                                    (<p>No hay { entityGUIName}</p>)
+                                    :
+                                    (<Table variant="dark" bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                {
+                                                    tableHeaders.map(function (h) {
+                                                        return <th key={v4()}>{h}</th>;
+                                                    })
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                tableEntries.map(function (e, i) {
+                                                    return buildRow(e, i);
+                                                })
+                                            }
+                                        </tbody>
+
+                                    </Table>)
+                            }
+                            <Modal show={this.state.isModalOpen} onHide={this.closeModal}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Borrar seleccionados</Modal.Title>
+                                </Modal.Header>
+
+                                <Modal.Body>
+                                    <p>¿Estas seguro de que quieres borrar la/s fila/s seleccionada/s?</p>
+                                </Modal.Body>
+
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={this.closeModal}>No</Button>
+                                    <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
+                                </Modal.Footer>
+                            </Modal>
+                        </Container>)
                         :
-                        (<Table variant="dark" bordered hover responsive>
-                            <thead>
-                                <tr>
-                                    {
-                                        tableHeaders.map(function (h) {
-                                            return <th key={v4()}>{h}</th>;
-                                        })
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    tableEntries.map(function (e, i) {
-                                        return buildRow(e, i);
-                                    })
-                                }
-                            </tbody>
-
-                        </Table>)
+                        (<Container className="text-center pt-5">
+                            <Spinner animation="border" variant="secondary" />
+                        </Container>)
                 }
-                <Modal show={this.state.isModalOpen} onHide={this.closeModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Borrar seleccionados</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <p>¿Estas seguro de que quieres borrar la/s fila/s seleccionada/s?</p>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.closeModal}>No</Button>
-                        <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
-                    </Modal.Footer>
-                </Modal>
             </Container>
         );
     }
