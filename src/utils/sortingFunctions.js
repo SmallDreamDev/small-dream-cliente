@@ -1,3 +1,11 @@
+function extractHourFromTimeString(time) {
+    return parseInt(time.split(":")[0], 10);
+}
+
+function extractMinutesFromTimeString(time) {
+    return parseInt(time.split(":")[1], 10);
+}
+
 function sortWorkshopsByDateAndTime(workshopList) {
     workshopList.sort(function (w1, w2) {
         if (w1.fecha === w2.fecha) {
@@ -19,14 +27,6 @@ function sortWorkshopsByDateAndTime(workshopList) {
         return Math.abs(date1) - Math.abs(date2);
     });
     return workshopList;
-}
-
-function extractHourFromTimeString(time) {
-    return parseInt(time.split(":")[0]);
-}
-
-function extractMinutesFromTimeString(time) {
-    return parseInt(time.split(":")[1]);
 }
 
 export { sortWorkshopsByDateAndTime };
