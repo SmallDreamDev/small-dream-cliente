@@ -5,7 +5,7 @@ import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { EditButton } from "./../components/EditButton";
 import { v4 } from "uuid";
 import "./../styles/card.css";
-import { sortWorkshopsByDate } from "./../utils/sortingFunctions";
+import { sortWorkshopsByDateAndTime } from "./../utils/sortingFunctions";
 
 function getAssociatedWorkshops(entity, collection) {
     let displayText = `${entity.actividad.nombre} (${entity.fecha} ${entity.hora_inicio}-${entity.hora_fin})`;
@@ -244,7 +244,7 @@ class ClientManager extends AbstractManager {
     }
 
     sortListItems(data) {
-        return sortWorkshopsByDate(data.talleres);
+        return sortWorkshopsByDateAndTime(data.talleres);
     }
 }
 
@@ -375,7 +375,7 @@ class WorkshopManager extends AbstractManager {
     }
 
     sortEntries(entries) {
-        return sortWorkshopsByDate(entries);
+        return sortWorkshopsByDateAndTime(entries);
     }
 }
 
