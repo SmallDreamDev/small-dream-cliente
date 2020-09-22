@@ -38,17 +38,17 @@ class CreateWorkshopForm extends AbstractComponent {
         let actividades = [];
         // Get monitores
         super.getAPIManager().getEntityList("monitores", function (entityList) {
-            entityList.forEach(element => {
+            entityList.forEach((element) => {
                 monitores.push(element);
             });
-            this.setState({ monitores: monitores });
+            this.setState({ monitores });
         }.bind(this));
         // Get actividades
         super.getAPIManager().getEntityList("actividades", function (entityList) {
-            entityList.forEach(element => {
+            entityList.forEach((element) => {
                 actividades.push(element);
             });
-            this.setState({ actividades: actividades });
+            this.setState({ actividades });
         }.bind(this));
     }
 
@@ -62,12 +62,12 @@ class CreateWorkshopForm extends AbstractComponent {
         // Get formatted date of the workshop
         let bDate = this.formRefs.fecha.current.getCurrentDate();
         let year = bDate.getFullYear();
-        let month = String(bDate.getMonth() + 1).padStart(2, '0');
-        let day = String(bDate.getDate()).padStart(2, '0');
+        let month = String(bDate.getMonth() + 1).padStart(2, "0");
+        let day = String(bDate.getDate()).padStart(2, "0");
         // Create the entity
         let entity = {
-            id_monitor: id_monitor,
-            id_actividad: id_actividad,
+            id_monitor,
+            id_actividad,
             fecha: `${year}/${month}/${day}`,
             hora_inicio: `${this.formRefs.horaInicioHoras.current.value}:${this.formRefs.horaInicioMinutos.current.value}`,
             hora_fin: `${this.formRefs.horaFinHoras.current.value}:${this.formRefs.horaFinMinutos.current.value}`,
@@ -75,7 +75,6 @@ class CreateWorkshopForm extends AbstractComponent {
             modo_pago: this.formRefs.modoDepago.current.value,
             importe: parseFloat(this.formRefs.importe.current.value)
         };
-        console.log(entity);
         return (entity);
     }
 
@@ -125,7 +124,7 @@ class CreateWorkshopForm extends AbstractComponent {
                                         Array.from(Array(24).keys()).map((number) => {
                                             return (
                                                 <option key={uuidV4()}>
-                                                    {String(number).padStart(2, '0')}
+                                                    {String(number).padStart(2, "0")}
                                                 </option>
                                             );
                                         })
@@ -139,7 +138,7 @@ class CreateWorkshopForm extends AbstractComponent {
                                         Array.from(Array(60).keys()).map((number) => {
                                             return (
                                                 <option key={uuidV4()}>
-                                                    {String(number).padStart(2, '0')}
+                                                    {String(number).padStart(2, "0")}
                                                 </option>
                                             );
                                         })
@@ -157,7 +156,7 @@ class CreateWorkshopForm extends AbstractComponent {
                                         Array.from(Array(24).keys()).map((number) => {
                                             return (
                                                 <option key={uuidV4()}>
-                                                    {String(number).padStart(2, '0')}
+                                                    {String(number).padStart(2, "0")}
                                                 </option>
                                             );
                                         })
@@ -171,7 +170,7 @@ class CreateWorkshopForm extends AbstractComponent {
                                         Array.from(Array(60).keys()).map((number) => {
                                             return (
                                                 <option key={uuidV4()}>
-                                                    {String(number).padStart(2, '0')}
+                                                    {String(number).padStart(2, "0")}
                                                 </option>
                                             );
                                         })
@@ -205,7 +204,7 @@ class CreateWorkshopForm extends AbstractComponent {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callbackFunction(this.getFormFieldsValues()) }}
+                        onClick={() => { this.callbackFunction(this.getFormFieldsValues()); }}
                     >Crear taller
                     </Button>
                 </Form>

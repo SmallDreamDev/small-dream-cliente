@@ -208,7 +208,7 @@ class ActivityManager extends AbstractManager {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                        onClick={() => { this.callAPICreateEntity(callbackFunction); }}
                     >Crear actividad
                     </Button>
                 </Form>
@@ -253,7 +253,6 @@ class CategoryManager extends AbstractManager {
     }
 
     callAPICreateEntity(callbackFunction) {
-        console.log("Ejecutando esto");
         let entityData = {
             nombre: this.formRefs.nombre.current.value
         };
@@ -336,8 +335,8 @@ class ClientManager extends AbstractManager {
     callAPICreateEntity(callbackFunction) {
         let bDate = this.formRefs.fechaNacimiento.current.getCurrentDate();
         let year = bDate.getFullYear();
-        let month = String(bDate.getMonth() + 1).padStart(2, '0');
-        let day = String(bDate.getDate()).padStart(2, '0');
+        let month = String(bDate.getMonth() + 1).padStart(2, "0");
+        let day = String(bDate.getDate()).padStart(2, "0");
         let entityData = {
             nombre_completo: this.formRefs.nombreCompleto.current.value,
             dni: this.formRefs.dni.current.value,

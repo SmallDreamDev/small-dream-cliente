@@ -31,7 +31,7 @@ class CreateEntityView extends AbstractComponent {
     callAPICreateEntity(entityData, errorAlert) {
         if (errorAlert) {
             this.setState({
-                errorAlert: errorAlert
+                errorAlert
             });
         } else {
             super.getAPIManager().createEntityForForms(
