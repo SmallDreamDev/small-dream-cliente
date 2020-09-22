@@ -6,6 +6,7 @@ import { v4 } from "uuid";
 import DatePicker from "react-date-picker";
 import { MyDatePicker } from "../components/MyDatePicker";
 import { apiManager } from "./APIManager";
+import { CreateWorkshopForm } from "../components/CreateEntityForms";
 
 class AbstractManager {
     constructor() {
@@ -355,7 +356,6 @@ class MaterialManager extends AbstractManager {
             descripcion: this.formRefs.descripcion.current.value,
             precio: parseFloat(this.formRefs.precio.current.value)
         };
-        console.log(entityData);
         callbackFunction(entityData);
     }
 
@@ -396,23 +396,7 @@ class WorkshopManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["# Actividad", "# Monitor", "Fecha", "Hora inicio", "Hora fin", "Plazas totales", "Pago", "Clientes apuntados"];
-        this.formRefs = {
-            actividad: React.createRef(),
-            monitor: React.createRef(),
-            fecha: React.createRef(),
-            horaInicio: React.createRef(),
-            horaFin: React.createRef(),
-            plazasTotales: React.createRef(),
-            modoDepago: React.createRef(),
-            importe: React.createRef()
-        };
-        // combobox activ.
-        // combo monit. 
-        // input fecha,
-        // hora 
-        // plazas totales,
-        // cbbox modosDePago 
-        // importe
+        this.formRef = React.createRef();
     }
 
     process(entry, index, checkboxes) {
@@ -433,140 +417,16 @@ class WorkshopManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity(callbackFunction) {
-        let entityData = {
-            id_monitor: "",
-            id_actividad: "",
-            fecha: "",
-            hora_inicio: "",
-            hora_fin: "",
-            plazas: "",
-            modo_pago: "",
-            importe: ""
-        };
-        callbackFunction(entityData);
-    }
-
     processCreateEntityForm(callbackFunction, errorAlert) {
-        let monitores, actividades = [];
-        // Get monitores
-        apiManager.getEntityList("monitores", function (entityList) {
-            entityList.forEach(element => {
-                monitores.push(element);
-            });
-        });
-        // Get actividades
-        apiManager.getEntityList("actividades", function (entityList) {
-            entityList.forEach(element => {
-                actividades.push(element);
-            });
-        });
         return (
             <Container>
                 <h1>Crear nuevo taller</h1>
                 {errorAlert ? errorAlert : null}
-                <Form>
-                    <Form.Group controlId="workshop.form.instructor">
-                        <Form.Label>Seleccionar monitor: </Form.Label>
-                        <Form.Control as="select">
-                            {
-                                monitores.map((monitor) => {
-                                    return (<option>{monitor}</option>);
-                                })
-                            }
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.activity">
-                        <Form.Label>Seleccionar Actividad: </Form.Label>
-                        <Form.Control as="select">
-                            {
-                                actividades.map((monitor) => {
-                                    return (<option>{monitor}</option>);
-                                })
-                            }
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.date">
-                        <Form.Label>Fecha: </Form.Label>
-                        <br />
-                        <MyDatePicker ref={this.formRefs.fecha} />
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.startTime">
-                        <Form.Label>Hora inicio: </Form.Label>
-                        <Row>
-                            <Col className="col-2">
-                                <Form.Control as="select">
-                                    {
-                                        Array.from(Array(24).keys()).map((number) => {
-                                            return (<option>{number}</option>);
-                                        })
-                                    }
-                                </Form.Control>
-                            </Col>
-                                :
-                            <Col className="col-2">
-                                <Form.Control as="select">
-                                    {
-                                        Array.from(Array(60).keys()).map((number) => {
-                                            return (<option>{number}</option>);
-                                        })
-                                    }
-                                </Form.Control>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.endTime">
-                        <Form.Label>Hora fin: </Form.Label>
-                        <Row>
-                            <Col className="col-2">
-                                <Form.Control as="select">
-                                    {
-                                        Array.from(Array(24).keys()).map((number) => {
-                                            return (<option>{number}</option>);
-                                        })
-                                    }
-                                </Form.Control>
-                            </Col>
-                                :
-                            <Col className="col-2">
-                                <Form.Control as="select">
-                                    {
-                                        Array.from(Array(60).keys()).map((number) => {
-                                            return (<option>{number}</option>);
-                                        })
-                                    }
-                                </Form.Control>
-                            </Col>
-                        </Row>
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.maxPeople">
-                        <Form.Label>Plazas totales: </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Número de plazas"
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.paymentType">
-                        <Form.Label>Modo de pago: </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Por hora"
-                        />
-                    </Form.Group>
-                    <Form.Group controlId="workshop.form.amount">
-                        <Form.Label>Importe: </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Cantidad"
-                        />
-                    </Form.Group>
-                    <Button
-                        variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
-                    >Crear taller
-                    </Button>
-                </Form >
-            </Container >
+                <CreateWorkshopForm
+                    ref={this.formRef}
+                    callbackFunction={callbackFunction}
+                />
+            </Container>
         );
     }
 }
