@@ -28,10 +28,10 @@ class CreateEntityView extends AbstractComponent {
         });
     }
 
-    callAPICreateEntity(entityData, errorAlert) {
-        if (errorAlert) {
+    callAPICreateEntity(entityData, createEntityButton, alert = null) {
+        if (alert) {
             this.setState({
-                errorAlert
+                errorAlert: alert
             });
         } else {
             super.getAPIManager().createEntityForForms(
@@ -56,6 +56,7 @@ class CreateEntityView extends AbstractComponent {
                     this.setState({
                         errorAlert: alertSuccess
                     });
+                    createEntityButton.disabled = true;
                 }.bind(this)
             );
         }

@@ -3,7 +3,6 @@ import { Container, Form, Button, InputGroup, FormControl, Table, Alert, Modal, 
 import { AbstractComponent } from "./../components/AbstractComponent";
 import { getManager, getCollectionName } from "./../utils/entityManager";
 import { v4 } from "uuid";
-import history from "../utils/history";
 import { Link } from "react-router-dom";
 import { FiRefreshCcw } from "react-icons/fi";
 
@@ -29,7 +28,6 @@ class EntityManagementView extends AbstractComponent {
         this.buildRow = this.buildRow.bind(this);
         this.toggleCheckboxes = this.toggleCheckboxes.bind(this);
         this.filterBySearchBar = this.filterBySearchBar.bind(this);
-        this.handleAddEntity = this.handleAddEntity.bind(this);
         this.handleDeleteSelected = this.handleDeleteSelected.bind(this);
         this.renderEntityDeletionError = this.renderEntityDeletionError.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -75,10 +73,6 @@ class EntityManagementView extends AbstractComponent {
             }
         });
         this.setState({ tableEntries: filteredEntries });
-    }
-
-    handleAddEntity() {
-        history.push("/crearEntidad/" + this.state.currentEntity);
     }
 
     handleDeleteSelected() {
@@ -194,7 +188,7 @@ class EntityManagementView extends AbstractComponent {
                                 </Container>
                                 <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
                                     <Button className="ml-1" variant="secondary" onClick={this.openModal}>Borrar seleccionados</Button>
-                                    <Button className="mx-1" variant="secondary" onClick={this.handleAddEntity}>Añadir</Button>
+                                    <Link className="mx-1 btn btn-secondary" to={"/crearEntidad/" + this.state.currentEntity}>Añadir</Link>
                                     <Button className="mr-1" variant="secondary" onClick={this.refresh}>
                                         <FiRefreshCcw />
                                     </Button>

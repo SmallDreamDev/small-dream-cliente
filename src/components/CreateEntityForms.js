@@ -23,7 +23,8 @@ class CreateWorkshopForm extends AbstractComponent {
             horaFinMinutos: React.createRef(),
             plazasTotales: React.createRef(),
             modoDepago: React.createRef(),
-            importe: React.createRef()
+            importe: React.createRef(),
+            boton: React.createRef()
         };
         this.callbackFunction = props.callbackFunction;
         this.loadEntitiesFromServer = this.loadEntitiesFromServer.bind(this);
@@ -203,8 +204,9 @@ class CreateWorkshopForm extends AbstractComponent {
                         />
                     </Form.Group>
                     <Button
+                        ref={this.formRefs.boton}
                         variant="primary"
-                        onClick={() => { this.callbackFunction(this.getFormFieldsValues()); }}
+                        onClick={(event) => { this.callbackFunction(this.getFormFieldsValues(), event.target); }}
                     >Crear taller
                     </Button>
                 </Form>

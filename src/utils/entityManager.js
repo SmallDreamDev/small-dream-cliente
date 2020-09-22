@@ -167,7 +167,7 @@ class ActivityManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity(callbackFunction) {
+    callAPICreateEntity(callbackFunction, createEntityButton) {
         let entityData = {
             nombre: this.formRefs.nombre.current.value,
             zona: this.formRefs.zona.current.value
@@ -178,9 +178,9 @@ class ActivityManager extends AbstractManager {
                     No puede haber campos vacíos
                 </Alert>
             );
-            callbackFunction(entityData, errorAlert);
+            callbackFunction(entityData, createEntityButton, errorAlert);
         } else {
-            callbackFunction(entityData, null);
+            callbackFunction(entityData, createEntityButton);
         }
     }
 
@@ -208,7 +208,7 @@ class ActivityManager extends AbstractManager {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction); }}
+                        onClick={(event) => { this.callAPICreateEntity(callbackFunction, event.target); }}
                     >Crear actividad
                     </Button>
                 </Form>
@@ -252,7 +252,7 @@ class CategoryManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity(callbackFunction) {
+    callAPICreateEntity(callbackFunction, createEntityButton) {
         let entityData = {
             nombre: this.formRefs.nombre.current.value
         };
@@ -262,9 +262,9 @@ class CategoryManager extends AbstractManager {
                     No puede haber campos vacíos
                 </Alert>
             );
-            callbackFunction(entityData, errorAlert);
+            callbackFunction(entityData, createEntityButton, errorAlert);
         } else {
-            callbackFunction(entityData, null);
+            callbackFunction(entityData, createEntityButton);
         }
     }
 
@@ -284,7 +284,7 @@ class CategoryManager extends AbstractManager {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                        onClick={(event) => { this.callAPICreateEntity(callbackFunction, event.target); }}
                     >Crear categoría
                     </Button>
                 </Form>
@@ -332,7 +332,7 @@ class ClientManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity(callbackFunction) {
+    callAPICreateEntity(callbackFunction, createEntityButton) {
         let bDate = this.formRefs.fechaNacimiento.current.getCurrentDate();
         let year = bDate.getFullYear();
         let month = String(bDate.getMonth() + 1).padStart(2, "0");
@@ -343,7 +343,18 @@ class ClientManager extends AbstractManager {
             contacto: this.formRefs.contacto.current.value,
             fecha_nacimiento: `${year}/${month}/${day}`
         };
-        callbackFunction(entityData);
+
+        if (!entityData.nombre_completo || !entityData.dni ||
+            !entityData.contacto || !entityData.fecha_nacimiento) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, createEntityButton, errorAlert);
+        } else {
+            callbackFunction(entityData, createEntityButton);
+        }
     }
 
     processCreateEntityForm(callbackFunction, errorAlert) {
@@ -385,7 +396,7 @@ class ClientManager extends AbstractManager {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                        onClick={(event) => { this.callAPICreateEntity(callbackFunction, event.target); }}
                     >Crear cliente
                     </Button>
                 </Form>
@@ -437,13 +448,22 @@ class InstructorManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity(callbackFunction) {
+    callAPICreateEntity(callbackFunction, createEntityButton) {
         let entityData = {
             nombre_completo: this.formRefs.nombreCompleto.current.value,
             dni: this.formRefs.dni.current.value,
             contacto: this.formRefs.contacto.current.value
         };
-        callbackFunction(entityData);
+        if (!entityData.nombre_completo || !entityData.dni || !entityData.contacto) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, createEntityButton, errorAlert);
+        } else {
+            callbackFunction(entityData, createEntityButton);
+        }
     }
 
     processCreateEntityForm(callbackFunction, errorAlert) {
@@ -478,7 +498,7 @@ class InstructorManager extends AbstractManager {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                        onClick={(event) => { this.callAPICreateEntity(callbackFunction, event.target); }}
                     >Crear monitor/a
                     </Button>
                 </Form>
@@ -524,12 +544,21 @@ class MaterialManager extends AbstractManager {
         );
     }
 
-    callAPICreateEntity(callbackFunction) {
+    callAPICreateEntity(callbackFunction, createEntityButton) {
         let entityData = {
             descripcion: this.formRefs.descripcion.current.value,
             precio: parseFloat(this.formRefs.precio.current.value)
         };
-        callbackFunction(entityData);
+        if (!entityData.descripcion || !entityData.precio) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, createEntityButton, errorAlert);
+        } else {
+            callbackFunction(entityData, createEntityButton);
+        }
     }
 
     processCreateEntityForm(callbackFunction, errorAlert) {
@@ -556,7 +585,7 @@ class MaterialManager extends AbstractManager {
                     </Form.Group>
                     <Button
                         variant="primary"
-                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                        onClick={(event) => { this.callAPICreateEntity(callbackFunction, event.target); }}
                     >Crear material
                     </Button>
                 </Form>
