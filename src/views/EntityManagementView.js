@@ -4,6 +4,7 @@ import { AbstractComponent } from "./../components/AbstractComponent";
 import { getManager, getCollectionName } from "./../utils/entityManager";
 import { v4 } from "uuid";
 import history from "../utils/history";
+import { Link } from "react-router-dom";
 import { FiRefreshCcw } from "react-icons/fi";
 
 class EntityManagementView extends AbstractComponent {
@@ -64,7 +65,10 @@ class EntityManagementView extends AbstractComponent {
         let filteredEntries = [];
         this.state.allEntries.forEach(function (e) {
             for (let key in e) {
-                if (typeof e[key] === "string" && e[key].toLowerCase().includes(input.toLowerCase())) {
+                if (
+                    typeof e[key] === "string" &&
+                    e[key].toLowerCase().includes(input.toLowerCase())
+                ) {
                     filteredEntries.push(e);
                     break;
                 }
@@ -74,14 +78,16 @@ class EntityManagementView extends AbstractComponent {
     }
 
     handleAddEntity() {
-        history.push("/crear?collection=" + this.state.currentEntity);
+        history.push("/crearEntidad/" + this.state.currentEntity);
     }
 
     handleDeleteSelected() {
         let deleteEntry = super.getAPIManager().deleteEntity;
         let _this = this;
         for (let i = 0; i < this.checkboxesClone.length; i++) {
-            let listElement = this.checkboxes.filter(function (c) { return c.current !== null; })[i];
+            let listElement = this.checkboxes.filter(
+                function (c) { return c.current !== null; }
+            )[i];
             listElement.current.toggleCheck(this.checkboxesClone[i]);
         }
         this.checkboxes.filter(function (chbx) {
@@ -91,10 +97,15 @@ class EntityManagementView extends AbstractComponent {
             let id = idCell.href.split(_this.state.currentEntity + "/")[1];
             deleteEntry(id, _this.state.currentEntity, function (isDeleted) {
                 if (isDeleted) {
-                    let tableEntries = _this.state.tableEntries.filter(function (e) { return e._id !== id; });
+                    let tableEntries = _this.state.tableEntries.filter(
+                        function (e) { return e._id !== id; }
+                    );
                     _this.setState({ tableEntries, isModalOpen: false });
                 } else {
-                    _this.setState({ deletionErrorMessage: "Ha habido un error al borrar la/s fila/s seleccionada/s", isModalOpen: false });
+                    _this.setState({
+                        deletionErrorMessage: "Ha habido un error al borrar la/s fila/s seleccionada/s",
+                        isModalOpen: false
+                    });
                     _this.renderEntityDeletionError();
                 }
             });
@@ -112,9 +123,16 @@ class EntityManagementView extends AbstractComponent {
     }
 
     openModal() {
-        let selected = this.checkboxes.filter(function (c) { return c.current !== null && c.current.checked(); }).length > 0;
+        let selected = this.checkboxes.filter(
+            function (c) { return c.current !== null && c.current.checked(); }
+        ).length > 0;
+
         if (selected) {
-            this.checkboxesClone = this.checkboxes.filter(function (c) { return c.current !== null; }).map(function (c) { return c.current.checked(); });
+            this.checkboxesClone = this.checkboxes.filter(
+                function (c) { return c.current !== null; }
+            ).map(
+                function (c) { return c.current.checked(); }
+            );
             this.setState({ isModalOpen: true });
         }
     }
