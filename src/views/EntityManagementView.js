@@ -1,19 +1,11 @@
 import React from "react";
-import {
-    Container,
-    Form,
-    Button,
-    InputGroup,
-    FormControl,
-    Table,
-    Alert,
-    Modal
-} from "react-bootstrap";
+import { Container, Form, Button, InputGroup, FormControl, Table, Alert, Modal, Spinner } from "react-bootstrap";
 import { AbstractComponent } from "./../components/AbstractComponent";
 import { getManager, getCollectionName } from "./../utils/entityManager";
 import { v4 } from "uuid";
 import history from "../utils/history";
 import { Link } from "react-router-dom";
+import { FiRefreshCcw } from "react-icons/fi";
 
 class EntityManagementView extends AbstractComponent {
 
@@ -33,7 +25,7 @@ class EntityManagementView extends AbstractComponent {
         this.manager = null;
         this.headerCheckbox = React.createRef();
         this.loadTable = this.loadTable.bind(this);
-        this.changeTable = this.changeTable.bind(this);
+        this.refresh = this.refresh.bind(this);
         this.buildRow = this.buildRow.bind(this);
         this.toggleCheckboxes = this.toggleCheckboxes.bind(this);
         this.filterBySearchBar = this.filterBySearchBar.bind(this);
@@ -49,7 +41,7 @@ class EntityManagementView extends AbstractComponent {
     }
 
     buildRow(entry, i) {
-        return this.manager.process(entry, i, this.checkboxes);
+        return this.manager.processTableEntry(entry, i, this.checkboxes);
     }
 
     toggleCheckboxes() {
@@ -102,7 +94,7 @@ class EntityManagementView extends AbstractComponent {
             return chbx.current !== null && chbx.current.checked();
         }).forEach(function (chbx) {
             let idCell = document.getElementById(chbx.current.id);
-            let id = idCell.href.split("id=")[1];
+            let id = idCell.href.split(_this.state.currentEntity + "/")[1];
             deleteEntry(id, _this.state.currentEntity, function (isDeleted) {
                 if (isDeleted) {
                     let tableEntries = _this.state.tableEntries.filter(
@@ -149,8 +141,8 @@ class EntityManagementView extends AbstractComponent {
         this.setState({ isModalOpen: false });
     }
 
-    changeTable() {
-
+    refresh() {
+        this.loadTable();
     }
 
     loadTable() {
@@ -163,14 +155,8 @@ class EntityManagementView extends AbstractComponent {
 
         let _this = this;
         super.getAPIManager().getEntityList(currentEntity, function (list) {
-            _this.setState({
-                currentEntity,
-                entityGUIName: entityGUIName.toLowerCase(),
-                tableHeaders,
-                tableEntries: list,
-                allEntries: list,
-                deletionErrorMessage: ""
-            });
+            _this.manager.sortEntries(list);
+            _this.setState({ currentEntity, entityGUIName: entityGUIName.toLowerCase(), tableHeaders, tableEntries: list, allEntries: list, deletionErrorMessage: "" });
         });
     }
 
@@ -179,90 +165,89 @@ class EntityManagementView extends AbstractComponent {
         let buildRow = this.buildRow;
         return (
             <Container className="p-0">
-                <Container className="p-0">
-                    <Container className="row px-0 mx-0 pt-2">
-                        <Form.Label>Selecciona una:</Form.Label>
-                    </Container>
-                    <Container className="row p-0 m-0">
-                        <Container className="col pl-0">
-                            <Form.Control id="tableSelector" as="select" onChange={this.loadTable}>
-                                <option>Actividades</option>
-                                <option>Categorías</option>
-                                <option>Clientes</option>
-                                <option>Materiales</option>
-                                <option>Monitores</option>
-                                <option>Programaciones</option>
-                            </Form.Control>
-                        </Container>
-                        <Container className="col pr-0">
-                            <InputGroup>
-                                <InputGroup.Prepend>
-                                    <InputGroup.Text>⌕</InputGroup.Text>
-                                </InputGroup.Prepend>
-                                <FormControl
-                                    id="inlineFormInputGroup"
-                                    placeholder="Nombre, apellidos..."
-                                    onChange={this.filterBySearchBar}
-                                />
-                            </InputGroup>
-                        </Container>
-                    </Container>
-                    <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
-                        <Button
-                            className="ml-1"
-                            variant="secondary"
-                            onClick={this.openModal}
-                        >Borrar seleccionados
-                        </Button>
-                        <Link
-                            className="btn btn-secondary"
-                            to={`/crearEntidad/${this.state.currentEntity}`}
-                        >Añadir
-                        </Link>
-                    </Container>
-                </Container>
-                <Container className="p-0">
-                    {this.renderEntityDeletionError()}
-                </Container>
                 {
-                    tableEntries.length === 0 && entityGUIName ?
-                        (<p>No hay { entityGUIName}</p>)
+                    tableEntries !== null ?
+                        (<Container className="p-0">
+                            <Container className="p-0">
+                                <Container className="row px-0 mx-0 pt-2">
+                                    <Form.Label>Selecciona una:</Form.Label>
+                                </Container>
+                                <Container className="row p-0 m-0">
+                                    <Container className="col pl-0">
+                                        <Form.Control id="tableSelector" as="select" onChange={this.loadTable}>
+                                            <option>Actividades</option>
+                                            <option>Categorías</option>
+                                            <option>Clientes</option>
+                                            <option>Materiales</option>
+                                            <option>Monitores</option>
+                                            <option>Programaciones</option>
+                                        </Form.Control>
+                                    </Container>
+                                    <Container className="col pr-0">
+                                        <InputGroup>
+                                            <InputGroup.Prepend>
+                                                <InputGroup.Text>⌕</InputGroup.Text>
+                                            </InputGroup.Prepend>
+                                            <FormControl id="inlineFormInputGroup" placeholder="Nombre, apellidos..." onChange={this.filterBySearchBar} />
+                                        </InputGroup>
+                                    </Container>
+                                </Container>
+                                <Container className="row d-flex flex-row-reverse p-0 mx-0 my-2">
+                                    <Button className="ml-1" variant="secondary" onClick={this.openModal}>Borrar seleccionados</Button>
+                                    <Button className="mx-1" variant="secondary" onClick={this.handleAddEntity}>Añadir</Button>
+                                    <Button className="mr-1" variant="secondary" onClick={this.refresh}>
+                                        <FiRefreshCcw />
+                                    </Button>
+                                </Container>
+                            </Container>
+                            <Container className="p-0">
+                                {this.renderEntityDeletionError()}
+                            </Container>
+                            {
+                                tableEntries.length === 0 && entityGUIName ?
+                                    (<p>No hay { entityGUIName}</p>)
+                                    :
+                                    (<Table variant="dark" bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                {
+                                                    tableHeaders.map(function (h) {
+                                                        return <th key={v4()}>{h}</th>;
+                                                    })
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                tableEntries.map(function (e, i) {
+                                                    return buildRow(e, i);
+                                                })
+                                            }
+                                        </tbody>
+
+                                    </Table>)
+                            }
+                            <Modal show={this.state.isModalOpen} onHide={this.closeModal}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Borrar seleccionados</Modal.Title>
+                                </Modal.Header>
+
+                                <Modal.Body>
+                                    <p>¿Estas seguro de que quieres borrar la/s fila/s seleccionada/s?</p>
+                                </Modal.Body>
+
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={this.closeModal}>No</Button>
+                                    <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
+                                </Modal.Footer>
+                            </Modal>
+                        </Container>)
                         :
-                        (<Table variant="dark" bordered hover responsive>
-                            <thead>
-                                <tr>
-                                    {
-                                        tableHeaders.map(function (h) {
-                                            return <th key={v4()}>{h}</th>;
-                                        })
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    tableEntries.map(function (e, i) {
-                                        return buildRow(e, i);
-                                    })
-                                }
-                            </tbody>
-
-                        </Table>)
+                        (<Container className="text-center pt-5">
+                            <Spinner animation="border" variant="secondary" />
+                        </Container>)
                 }
-                <Modal show={this.state.isModalOpen} onHide={this.closeModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Borrar seleccionados</Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <p>¿Estas seguro de que quieres borrar la/s fila/s seleccionada/s?</p>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.closeModal}>No</Button>
-                        <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
-                    </Modal.Footer>
-                </Modal>
-            </Container >
+            </Container>
         );
     }
 
