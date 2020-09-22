@@ -9,9 +9,10 @@ class AbstractComponent extends React.Component {
         this.getAPIManager = this.getAPIManager.bind(this);
     }
 
-    getAPIManager(){
+    getAPIManager() {
         return apiManager;
     }
+
 }
 
 export { AbstractComponent };

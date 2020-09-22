@@ -1,9 +1,11 @@
 import React from "react";
-import { Container, Form, ListGroup, Row, Col } from "react-bootstrap";
+import { Button, Alert, Container, Form, ListGroup, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { CustomCheckbox } from "./../components/CustomCheckbox";
 import { EditButton } from "./../components/EditButton";
 import { v4 } from "uuid";
+import { MyDatePicker } from "../components/MyDatePicker";
+import { CreateWorkshopForm } from "../components/CreateEntityForms";
 import "./../styles/card.css";
 import { sortWorkshopsByDateAndTime } from "./../utils/sortingFunctions";
 
@@ -145,6 +147,10 @@ class ActivityManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre", "Zona", "Categorías asociadas", "Materiales usados"];
+        this.formRefs = {
+            nombre: React.createRef(),
+            zona: React.createRef()
+        };
     }
 
     processTableEntry(entry, index, checkboxes) {
@@ -158,6 +164,55 @@ class ActivityManager extends AbstractManager {
                 <td><Link to={`/detalles/actividades/${_id}`}>Ver categorías asociadas</Link></td>
                 <td><Link to={`/detalles/actividades/${_id}`}>Ver materiales usados</Link></td>
             </tr>
+        );
+    }
+
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
+            nombre: this.formRefs.nombre.current.value,
+            zona: this.formRefs.zona.current.value
+        };
+        if (!entityData.nombre | !entityData.zona) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, errorAlert);
+        } else {
+            callbackFunction(entityData, null);
+        }
+    }
+
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        return (
+            <Container>
+                <h1>Crear nueva actividad</h1>
+                {errorAlert ? errorAlert : null}
+                <Form>
+                    <Form.Group controlId="activity.form.name">
+                        <Form.Label>Nombre: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.nombre}
+                            type="text"
+                            placeholder="Jumping Clay"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="activity.form.area">
+                        <Form.Label>Zona: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.zona}
+                            type="text"
+                            placeholder="A"
+                        />
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction); }}
+                    >Crear actividad
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 
@@ -180,6 +235,9 @@ class CategoryManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre", "Actividades en esta categoría"];
+        this.formRefs = {
+            nombre: React.createRef()
+        };
     }
 
     processTableEntry(entry, index, checkboxes) {
@@ -191,6 +249,46 @@ class CategoryManager extends AbstractManager {
                 <td>{nombre}</td>
                 <td><Link to={`/detalles/categorias/${_id}`}>Ver actividades</Link></td>
             </tr>
+        );
+    }
+
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
+            nombre: this.formRefs.nombre.current.value
+        };
+        if (!entityData.nombre) {
+            let errorAlert = (
+                <Alert variant="danger">
+                    No puede haber campos vacíos
+                </Alert>
+            );
+            callbackFunction(entityData, errorAlert);
+        } else {
+            callbackFunction(entityData, null);
+        }
+    }
+
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        return (
+            <Container>
+                <h1>Crear nueva categoría</h1>
+                {errorAlert ? errorAlert : null}
+                <Form>
+                    <Form.Group controlId="category.form.name">
+                        <Form.Label>Nombre: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.nombre}
+                            type="text"
+                            placeholder="Steam for kids"
+                        />
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear categoría
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 
@@ -211,6 +309,12 @@ class ClientManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre y apellidos", "DNI", "Contacto", "Fecha de nacimiento", "Actividades en las que está apuntado"];
+        this.formRefs = {
+            nombreCompleto: React.createRef(),
+            dni: React.createRef(),
+            contacto: React.createRef(),
+            fechaNacimiento: React.createRef()
+        };
     }
 
     processTableEntry(entry, index, checkboxes) {
@@ -225,6 +329,67 @@ class ClientManager extends AbstractManager {
                 <td>{fecha_nacimiento}</td>
                 <td><Link to={`/detalles/clientes/${_id}`}>Ver actividades</Link></td>
             </tr>
+        );
+    }
+
+    callAPICreateEntity(callbackFunction) {
+        let bDate = this.formRefs.fechaNacimiento.current.getCurrentDate();
+        let year = bDate.getFullYear();
+        let month = String(bDate.getMonth() + 1).padStart(2, "0");
+        let day = String(bDate.getDate()).padStart(2, "0");
+        let entityData = {
+            nombre_completo: this.formRefs.nombreCompleto.current.value,
+            dni: this.formRefs.dni.current.value,
+            contacto: this.formRefs.contacto.current.value,
+            fecha_nacimiento: `${year}/${month}/${day}`
+        };
+        callbackFunction(entityData);
+    }
+
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        return (
+            <Container>
+                <h1>Crear nuevo cliente</h1>
+                {errorAlert ? errorAlert : null}
+                <Form>
+                    <Form.Group controlId="client.form.name">
+                        <Form.Label>Nombre completo: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.nombreCompleto}
+                            type="text"
+                            placeholder="Javier Sánchez Sáenz"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.dni">
+                        <Form.Label>DNI: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.dni}
+                            type="text"
+                            placeholder="78945612S"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.contact">
+                        <Form.Label>Contacto: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.contacto}
+                            type="text"
+                            placeholder="Tfno. Móvil, fijo, email, ..."
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="client.form.birthDate">
+                        <Form.Label>Fecha de nacimiento: </Form.Label>
+                        <br />
+                        <MyDatePicker
+                            ref={this.formRefs.fechaNacimiento}
+                        />
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear cliente
+                    </Button>
+                </Form>
+            </Container>
         );
     }
 
@@ -252,6 +417,11 @@ class InstructorManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Nombre y apellidos", "DNI", "Contacto"];
+        this.formRefs = {
+            nombreCompleto: React.createRef(),
+            dni: React.createRef(),
+            contacto: React.createRef()
+        };
     }
 
     processTableEntry(entry, index, checkboxes) {
@@ -267,6 +437,55 @@ class InstructorManager extends AbstractManager {
         );
     }
 
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
+            nombre_completo: this.formRefs.nombreCompleto.current.value,
+            dni: this.formRefs.dni.current.value,
+            contacto: this.formRefs.contacto.current.value
+        };
+        callbackFunction(entityData);
+    }
+
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        return (
+            <Container>
+                <h1>Crear nuevo/a monitor/a</h1>
+                {errorAlert ? errorAlert : null}
+                <Form>
+                    <Form.Group controlId="instructor.form.name">
+                        <Form.Label>Nombre completo: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.nombreCompleto}
+                            type="text"
+                            placeholder="Javier Sánchez Sáenz"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="instructor.form.dni">
+                        <Form.Label>DNI: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.dni}
+                            type="text"
+                            placeholder="78945612S"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="instructor.form.contact">
+                        <Form.Label>Contacto: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.contacto}
+                            type="text"
+                            placeholder="Tfno. Móvil, fijo, email, ..."
+                        />
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear monitor/a
+                    </Button>
+                </Form>
+            </Container>
+        );
+    }
+
     processEntityCard(data) {
         const { _id, nombre_completo, dni, contacto } = data;
         return (
@@ -279,12 +498,17 @@ class InstructorManager extends AbstractManager {
             </Container>
         );
     }
+
 }
 
 class MaterialManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["Descripción", "Precio", "Actividades que usan este material"];
+        this.formRefs = {
+            descripcion: React.createRef(),
+            precio: React.createRef()
+        };
     }
 
     processTableEntry(entry, index, checkboxes) {
@@ -300,6 +524,46 @@ class MaterialManager extends AbstractManager {
         );
     }
 
+    callAPICreateEntity(callbackFunction) {
+        let entityData = {
+            descripcion: this.formRefs.descripcion.current.value,
+            precio: parseFloat(this.formRefs.precio.current.value)
+        };
+        callbackFunction(entityData);
+    }
+
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        return (
+            <Container>
+                <h1>Crear nuevo material</h1>
+                {errorAlert ? errorAlert : null}
+                <Form>
+                    <Form.Group controlId="material.form.cost">
+                        <Form.Label>Precio: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.precio}
+                            type="text"
+                            placeholder="Precio genérico"
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="material.form.description">
+                        <Form.Label>Description: </Form.Label>
+                        <Form.Control
+                            ref={this.formRefs.descripcion}
+                            type="text"
+                            placeholder="Arcilla blanca para modelar"
+                        />
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        onClick={() => { this.callAPICreateEntity(callbackFunction) }}
+                    >Crear material
+                    </Button>
+                </Form>
+            </Container>
+        );
+    }
+
     processEntityCard(data) {
         const { _id, descripcion, precio, actividades } = data;
         return (
@@ -312,12 +576,14 @@ class MaterialManager extends AbstractManager {
             </Container>
         );
     }
+
 }
 
 class WorkshopManager extends AbstractManager {
     constructor() {
         super();
         this.headers = ["# Actividad", "# Monitor", "Fecha", "Hora inicio", "Hora fin", "Plazas totales", "Pago", "Clientes apuntados"];
+        this.formRef = React.createRef();
     }
 
     processTableEntry(entry, index, checkboxes) {
@@ -338,6 +604,18 @@ class WorkshopManager extends AbstractManager {
         );
     }
 
+    processCreateEntityForm(callbackFunction, errorAlert) {
+        return (
+            <Container>
+                <h1>Crear nuevo taller</h1>
+                {errorAlert ? errorAlert : null}
+                <CreateWorkshopForm
+                    ref={this.formRef}
+                    callbackFunction={callbackFunction}
+                />
+            </Container>
+        );
+    }
     processEntityCard(data) {
         const { _id, actividad, monitor, fecha, hora_inicio, hora_fin, plazas, modo_pago, importe, clientes } = data;
         return (
