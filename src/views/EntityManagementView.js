@@ -18,6 +18,7 @@ class EntityManagementView extends AbstractComponent {
             allEntries: [],
             deletionErrorMessage: "",
             isModalOpen: false,
+            deleting: false
         };
         this.checkboxes = [];
         this.checkboxesClone = [];
@@ -78,6 +79,7 @@ class EntityManagementView extends AbstractComponent {
     }
 
     handleDeleteSelected() {
+        this.setState({ deleting: true });
         let deleteEntry = super.getAPIManager().deleteEntity;
         let _this = this;
         for (let i = 0; i < this.checkboxesClone.length; i++) {
@@ -92,9 +94,9 @@ class EntityManagementView extends AbstractComponent {
             deleteEntry(id, _this.state.currentEntity, function (isDeleted) {
                 if (isDeleted) {
                     let tableEntries = _this.state.tableEntries.filter(function (e) { return e._id !== id; });
-                    _this.setState({ tableEntries, isModalOpen: false });
+                    _this.setState({ tableEntries, isModalOpen: false, deleting: false });
                 } else {
-                    _this.setState({ deletionErrorMessage: "Ha habido un error al borrar la/s fila/s seleccionada/s", isModalOpen: false });
+                    _this.setState({ deletionErrorMessage: "Ha habido un error al borrar la/s fila/s seleccionada/s", isModalOpen: false, deleting: false });
                     _this.renderEntityDeletionError();
                 }
             });
@@ -214,14 +216,23 @@ class EntityManagementView extends AbstractComponent {
                                     <Modal.Title>Borrar seleccionados</Modal.Title>
                                 </Modal.Header>
 
-                                <Modal.Body>
-                                    <p>¿Estas seguro de que quieres borrar la/s fila/s seleccionada/s?</p>
-                                </Modal.Body>
+                                {
+                                    this.state.deleting ?
+                                        (<Modal.Body>
+                                            <Spinner animation="border" variant="secondary" />
+                                        </Modal.Body>)
+                                        :
+                                        (<Container className="p-0">
+                                            <Modal.Body>
+                                                <p>¿Estas seguro de que quieres borrar la/s fila/s seleccionada/s?</p>
+                                            </Modal.Body>
 
-                                <Modal.Footer>
-                                    <Button variant="secondary" onClick={this.closeModal}>No</Button>
-                                    <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
-                                </Modal.Footer>
+                                            <Modal.Footer>
+                                                <Button variant="secondary" onClick={this.closeModal}>No</Button>
+                                                <Button variant="primary" onClick={this.handleDeleteSelected}>Sí</Button>
+                                            </Modal.Footer>
+                                        </Container>)
+                                }
                             </Modal>
                         </Container>)
                         :
