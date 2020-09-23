@@ -1,5 +1,8 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
+
+import "./../styles/calendarView.css";
 
 class CalendarView extends React.Component {
 
@@ -9,9 +12,12 @@ class CalendarView extends React.Component {
             dateObject: {}
         };
         this.componentRefs = props.componentRefs;
+        this.zoneHeaders = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
+        this.times = [10, 21];
         this.componentDidMount = this.componentDidMount.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.renderActivitiesOnDate = this.renderActivitiesOnDate.bind(this);
+        this.generateTimestamps = this.generateTimestamps.bind(this);
     }
 
     componentDidMount() {
@@ -28,14 +34,39 @@ class CalendarView extends React.Component {
         this.setState({ dateObject });
     }
 
+    generateTimestamps() {
+        let timeStrings = [];
+        for (let i = this.times[0]; i <= this.times[1]; i++) {
+            timeStrings.push(`${i}:00`);
+        }
+        return timeStrings;
+    }
+
     render() {
         return (
-            <Container>
-                <h1>Test</h1>
-                <p>{this.state.dateObject.day}</p>
-                <p>{this.state.dateObject.month}</p>
-                <p>{this.state.dateObject.year}</p>
-            </Container>
+            <Container id="container-main" className="p-0 ml-0">
+                <Container className="p-0" id="container-times">
+                    {
+                        this.generateTimestamps().map(function (timestamp) {
+                            return (
+                                <Container className="p-0" key={uuidv4()}>
+                                    <span>{timestamp}</span>
+                                </Container>
+                            );
+                        })
+                    }
+                </Container>
+                <Container className="p-0" id="container-zones">
+                    {
+                        this.zoneHeaders.map(function (header) {
+                            return (
+                                <Container className="p-0 zone-column" key={uuidv4()}>
+                                </Container>
+                            );
+                        })
+                    }
+                </Container>
+            </Container >
         );
     }
 }

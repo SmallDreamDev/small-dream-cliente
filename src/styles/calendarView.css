@@ -1,0 +1,28 @@
+#container-main {
+    display: grid;
+    grid-template-areas: "times zones";
+    grid-template-columns: 1fr 11fr;
+}
+
+#container-times {
+    grid-area: times;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+#container-zones {
+    grid-area: zones;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.calendar-event {
+
+}
+
+.zone-column {
+    background-color: gray;
+    border: 1px solid black;
+}

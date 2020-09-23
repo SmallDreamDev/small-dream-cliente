@@ -669,6 +669,8 @@ class WorkshopManager extends AbstractManager {
                 {super.getEntityCardTextComponent("Fecha:", "fecha", fecha, "talleres", _id)}
                 {super.getEntityCardTextComponent("Hora de inicio:", "hora_inicio", hora_inicio, "talleres", _id)}
                 {super.getEntityCardTextComponent("Hora de fin:", "hora_fin", hora_fin, "talleres", _id)}
+                {super.getEntityCardTextComponent("Importe:", "importe", importe, "talleres", _id)}
+                {super.getEntityCardTextComponent("Modo de pago:", "modo_pago", modo_pago, "talleres", _id)}
                 <Form.Label>Plazas:</Form.Label>
                 <Form.Group className="seats-container">
                     {

@@ -31,7 +31,7 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<Container>
+			<Container id="container-root" className="p-0">
 				{
 					// this.state.token ?
 					(<Router>
